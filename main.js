@@ -20,8 +20,7 @@
 
 // -------------------- GLOBAL VARIABLES --------------------
 let plr // player object, initialised in setup()
-let activePlatforms = [] // all currently visible platforms are stored in this array
-let activeEnemies = [] // all currently visible enemies are stored in this array
+let activeObstacles = [] // all currently visible obstacles are stored in this array
 
 // -------------------- PRELOAD --------------------
 // runs once before setup()
@@ -43,8 +42,8 @@ function setup() {
     plr = new Player(Scene.width/2, Scene.floorHeight - 20)
 
     do {
-        generatePlatform()
-    } while (activePlatforms[activePlatforms.length - 1].y > 0)
+        generateObstacle()
+    } while (activeObstacles[activeObstacles.length - 1].y > 0)
 }
 
 // -------------------- DRAW --------------------
@@ -52,29 +51,22 @@ function setup() {
 function draw() {
     background(220)
 
+    
     plr.draw()
     // plr.debugDraw()
-
+    
     plr.update()
     plr.move()
-
-    activePlatforms.forEach(platform => {
-        platform.draw()
-        platform.update()
-    })
-
-    // checks for platforms below the screen and deletes them
-    deletePlatforms() 
-
-    activeEnemies.forEach(enemy => {
-        enemy.draw()
-        enemy.update()
+    
+    activeObstacles.forEach(obstacle => {
+        obstacle.draw()
+        obstacle.update()
     })
     
-    // checks for enemies below the screen and deletes them
-    deleteEnemies()
-
-    if (Camera.wasScrolled) generatePlatform()
+    // checks for obstacles below the screen and deletes them
+    deleteObstacles() 
+    
+    if (Camera.wasScrolled) generateObstacle()
     Camera.wasScrolled = false
 
     drawWindowBorder()

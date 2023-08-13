@@ -18,8 +18,7 @@ function scrollCamera() {
 
     let yScroll = -plr.yVel 
     
-    scroll(activePlatforms, yScroll)
-    scroll(activeEnemies, yScroll)
+    scroll(activeObstacles, yScroll)
 
     Camera.wasScrolled = true
 }

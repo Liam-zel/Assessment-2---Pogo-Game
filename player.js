@@ -153,24 +153,10 @@ class Player {
      * Checks collision with floor, platforms etc.
      */
     checkCollisions() {
-
-        // platforms, only check when moving downwards
-        if (this.yVel > 0) {
-            activePlatforms.forEach(p => {
-                if (this.checkHitboxOverlap(p.x, p.y, p.w, p.h)) {
-                    // let adjustment = this.y - p.y + this.h/2
-                    // this.updateCollisionPoints(0, -adjustment)
-                    // this.y = p.y - this.h/2
-
-                    p.onCollision(this)
-                }
-            })
-        }
-
-        // enemies
-        activeEnemies.forEach(e => {
-            if (this.checkHitboxOverlap(e.x, e.y, e.w, e.h)) {
-                e.onCollision(this)
+        activeObstacles.forEach(o => {
+            if (this.checkHitboxOverlap(o.x, o.y, o.w, o.h)) {
+                if (o instanceof Platform && this.yVel > 0) o.onCollision(this)
+                else if (o instanceof Enemy) o.onCollision(this)
             }
         })
 
