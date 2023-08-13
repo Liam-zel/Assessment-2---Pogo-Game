@@ -1,4 +1,7 @@
-// -------------------- PLAYER CLASS --------------------
+// -------------------- CLASSES --------------------
+/**
+ * Base enemy class
+ */
 class Enemy {
     constructor(x, y) {
         this.x = x
