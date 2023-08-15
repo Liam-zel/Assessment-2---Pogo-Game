@@ -21,6 +21,8 @@ class Player {
         this.yVel = 0
         this.xVel = 0
 
+        this.hasPowerup = false
+
         // The corners of the character, used for collisions
         this.collisionPoints = {
             topLeft:     {x: this.x - this.w/2, y: this.y - this.h/2},
@@ -171,6 +173,13 @@ class Player {
         activeEnemies.forEach(e => {
             if (this.checkHitboxOverlap(e.x, e.y, e.w, e.h)) {
                 e.onCollision(this)
+            }
+        })
+
+        // powerups
+        activePowerups.forEach(pow => {
+            if (this.checkHitboxOverlap(pow.x, pow.y, pow.w, pow.h)) {
+                pow.pickUp(this)
             }
         })
 
