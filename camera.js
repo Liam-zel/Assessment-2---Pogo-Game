@@ -21,5 +21,11 @@ function scrollCamera() {
     scroll(activePlatforms, yScroll)
     scroll(activeEnemies, yScroll)
 
+    // create array from every platforms attachedPowerup property
+    let activePowerups = activePlatforms.map(p => p.attachedPowerup)
+    // removes undefined elements in the array
+    activePowerups = activePowerups.filter(p => p !== undefined)
+    scroll(activePowerups, yScroll)
+
     Camera.wasScrolled = true
 }
