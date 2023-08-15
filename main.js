@@ -22,6 +22,7 @@
 let plr // player object, initialised in setup()
 let activePlatforms = [] // all currently visible platforms are stored in this array
 let activeEnemies = [] // all currently visible enemies are stored in this array
+let activePowerups = [] // all currently visible powerups are stored in this array
 
 // -------------------- PRELOAD --------------------
 // runs once before setup()
@@ -86,5 +87,13 @@ function keyPressed() {
 
     if (keyCode === keys.space) {
         plr.jump()
+    }
+
+    if (keyCode === keys.leftArrow) {
+        frameRate(0)
+    }
+
+    if (keyCode === keys.rightArrow) {
+        frameRate(60)
     }
 }
