@@ -1,6 +1,6 @@
 // -------------------- SCENE OBJECT --------------------
 /**
- * Global object that defines important game variables
+ * Global object that defines important scene variables
  */
 let Scene = {
     width: undefined,
