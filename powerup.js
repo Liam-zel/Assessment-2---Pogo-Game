@@ -37,25 +37,37 @@ class Powerup {
     // Detaches powerup from parent platform
     remove() {
         this.parentPlatform.attachedPowerup = undefined
-        activePowerups.splice(activePowerups.indexOf(this), 1)
+        visiblePowerups.splice(visiblePowerups.indexOf(this), 1)
     }
 
 
-    // runs when player picks up powerup
+    // picks up powerup
     pickUp(plr) {
-        plr.hasPowerup = true
+        plr.activePowerups.push(this)
         this.pickedUp = true
 
-        // visiblePowerups.splice(visiblePowerups.indexOf(this), 1)
+        this.onPickUp(plr)
 
         this.update(plr)
+        this.remove()
     } 
 
 
-    effect(plr) {} // generic function to run effect of powerup
+    /**
+     * generic function to run the moment the powerup is picked up
+     */
+    onPickUp(plr) {} 
+
+    /**
+     * generic function to run effect of powerup, continuously runs over the powerups
+     */
+    effect(plr) {}
 
 
-    deactivate(plr) {} // generic function that runs when a powerup's duration runs out
+    /**
+     * generic function that runs when a powerup's duration runs out
+     */
+    deactivate(plr) {}
 
 
     // runs the powerup's effect until its duration hits 0
@@ -67,8 +79,7 @@ class Powerup {
             this.effect(plr)
 
             if (this.duration <= 0) {
-                this.remove()
-                plr.hasPowerup = false
+                plr.activePowerups.splice(plr.activePowerups.indexOf(this), 1)
                 this.deactivate(plr)
 
                 clearInterval(update)
@@ -85,8 +96,8 @@ class Jetpack extends Powerup {
     constructor(platform) {
         super(platform)
 
-        this.boost = -3
-        this.duration = 5000
+        this.boost = -45
+        this.duration = 3000
     }
 
     effect(plr) {
@@ -107,17 +118,15 @@ class SpringBoots extends Powerup {
         this.h = 20
 
         this.duration = 6000
-        this.springJump = 30
-        this.originalJumpPower = 0
+        this.jumpBoost = 8
     }
 
-    effect(plr) {
-        if (plr.jumpPower !== this.springJump) this.originalJumpPower = plr.jumpPower
-        plr.jumpPower = this.springJump
+    onPickUp(plr) {
+        plr.jumpPower += this.jumpBoost
     }
 
     deactivate(plr) {
-        plr.jumpPower = this.originalJumpPower
+        plr.jumpPower -= this.jumpBoost
     }
 }
 
@@ -131,8 +140,8 @@ class SpringBoots extends Powerup {
 function generatePowerup(platform) {
     // array of functions
     const powerups = [
-        (p) => {return new Jetpack(p)},
-        // (p) => {return new SpringBoots(p)},
+        // (p) => {return new Jetpack(p)},
+        (p) => {return new SpringBoots(p)},
     ] 
 
     let index = floor(random(powerups.length))
