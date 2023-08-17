@@ -15,7 +15,7 @@ class Platform {
         this.attachedPowerup = undefined
     }
 
-    
+
     draw() {
         strokeWeight(3)
         fill(this.col)
@@ -93,10 +93,8 @@ class movingPlatform extends Platform {
  * Generates a platform with random type, x position and y position
  */
 function generatePlatform() {
-    const powerupChance = 10 // 1 in powerupChance
-
     // platforms can generate too far in advance, this prevents that
-    if (activePlatforms.length > 0 && activePlatforms[activePlatforms.length-1].y < -500) return
+    if (visiblePlatforms.length > 0 && visiblePlatforms[visiblePlatforms.length-1].y < -500) return
 
     // array of functions
     const platformTypes = [
@@ -109,37 +107,30 @@ function generatePlatform() {
     
     let x = floor(random(Scene.leftBorder, Scene.rightBorder - 80))
     
-    // y position of previous platform, otherwise its the floors y position
+    // y position of previous platform, otherwise use the floors y position
     let previousY = Scene.floorHeight - 70
-    if (activePlatforms.length > 0) previousY = activePlatforms[activePlatforms.length-1].y
+    if (visiblePlatforms.length > 0) previousY = visiblePlatforms[visiblePlatforms.length-1].y
     
-    let y = floor(random(previousY, previousY-130))
+    let y = floor(random(previousY, previousY - Game.platformMaxHeightDistance))
     
-    activePlatforms.push( platformTypes[index](x, y) )
-
-    // attach powerup (1 in 100 chance)
-    if (floor(random(powerupChance)) === 0 && !plr.hasPowerup) {
-        attachPowerup(activePlatforms[activePlatforms.length-1])
+    visiblePlatforms.push( platformTypes[index](x, y) )
+            
+    // rolls random number between 0 - powerupChance
+    if (floor(random(Game.powerupChance)) === 0) {
+        generatePowerup(visiblePlatforms[visiblePlatforms.length-1])
     }
 }
 
 
 /**
- * Creates and attaches a new powerup object to the given platform argument
- * @param {Object} platform a given platform object to have a powerup attached to it
+ * Generates platforms ahead of the player until a y level threshold
  */
-function attachPowerup(platform) {
-    // array of functions
-    const powerups = [
-        (p) => {return new Jetpack(p)},
-    ] 
+function createPlatforms() {
+    const threshold = -500 // -500px
 
-    let index = floor(random(powerups.length))
-
-    let powerup = powerups[index](platform)
-
-    platform.attachedPowerup = powerup
-    activePowerups.push(powerup)
+    do {
+        generatePlatform()
+    } while (visiblePlatforms[visiblePlatforms.length - 1].y > threshold)
 }
 
 
@@ -147,11 +138,13 @@ function attachPowerup(platform) {
  * Checks if any platforms are below the screen, and if so, deletes them
  */
 function deletePlatforms() {
-    activePlatforms.forEach(platform => {
+    visiblePlatforms.forEach(platform => {
+        let heightThreshold = Scene.height
+        if (platform.attachedPowerup !== undefined) heightThreshold += platform.attachedPowerup.h
 
-        if (platform.y > Scene.height) {
-            if (platform.attachedPowerup !== undefined) activePowerups.splice(activePowerups.indexOf(platform.attachedPowerup), 1)
-            activePlatforms.splice(activePlatforms.indexOf(platform), 1)
+        if (platform.y > heightThreshold) {
+            if (platform.attachedPowerup !== undefined) visiblePowerups.splice(visiblePowerups.indexOf(platform.attachedPowerup), 1)
+            visiblePlatforms.splice(visiblePlatforms.indexOf(platform), 1)
         }
 
     })
