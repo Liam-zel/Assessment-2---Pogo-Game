@@ -20,9 +20,9 @@
 
 // -------------------- GLOBAL VARIABLES --------------------
 let plr // player object, initialised in setup()
-let activePlatforms = [] // all currently visible platforms are stored in this array
-let activeEnemies = [] // all currently visible enemies are stored in this array
-let activePowerups = [] // all currently visible powerups are stored in this array
+let visiblePlatforms = [] // all currently visible platforms are stored in this array
+let visibleEnemies = [] // all currently visible enemies are stored in this array
+let visiblePowerups = [] // all currently visible powerups are stored in this array
 
 // -------------------- PRELOAD --------------------
 // runs once before setup()
@@ -43,9 +43,7 @@ function setup() {
     
     plr = new Player(Scene.width/2, Scene.floorHeight - 20)
 
-    do {
-        generatePlatform()
-    } while (activePlatforms[activePlatforms.length - 1].y > 0)
+    createPlatforms()
 }
 
 // -------------------- DRAW --------------------
@@ -59,7 +57,7 @@ function draw() {
     plr.update()
     plr.move()
 
-    activePlatforms.forEach(platform => {
+    visiblePlatforms.forEach(platform => {
         platform.draw()
         platform.update()
     })
@@ -67,7 +65,7 @@ function draw() {
     // checks for platforms below the screen and deletes them
     deletePlatforms() 
 
-    activeEnemies.forEach(enemy => {
+    visibleEnemies.forEach(enemy => {
         enemy.draw()
         enemy.update()
     })
@@ -75,7 +73,10 @@ function draw() {
     // checks for enemies below the screen and deletes them
     deleteEnemies()
 
-    if (Camera.wasScrolled) generatePlatform()
+    // draws current score to screen
+    drawScore()
+ 
+    if (Camera.wasScrolled) createPlatforms()
     Camera.wasScrolled = false
 
     drawWindowBorder()
