@@ -18,10 +18,12 @@ class Player {
 
         this.moveSpeed = 0.15 
 
+        this.heighestPoint = Infinity
+
         this.yVel = 0
         this.xVel = 0
 
-        this.hasPowerup = false
+        this.activePowerups = []
 
         // The corners of the character, used for collisions
         this.collisionPoints = {
@@ -30,6 +32,12 @@ class Player {
             bottomLeft:  {x: this.x - this.w/2, y: this.y + this.h/2},
             bottomRight: {x: this.x + this.w/2, y: this.y + this.h/2},
         }
+
+        // So platforms only collide with the bottom two points of the player
+        this.platformCollisionPoints = [
+            this.collisionPoints.bottomLeft,
+            this.collisionPoints.bottomRight
+        ]
 
         // x pos the player is moving to
         this.xTarget = x + Scene.xOffset 
@@ -41,12 +49,12 @@ class Player {
      */
     draw() {
         strokeWeight(4)
-        rectMode(CENTER)
+        rectMode(CENTER) // player is drawn from the center of his x,y position 
 
         fill(this.col)
         rect(this.x, this.y, this.w, this.h)
 
-        rectMode(CORNER)
+        rectMode(CORNER) // everything else is drawn from the top left, using their x,y position
     }
 
     
@@ -67,6 +75,9 @@ class Player {
 
             point(p.x, p.y)
         }
+
+        // heighest point
+        line(0, plr.heighestPoint, windowWidth, plr.heighestPoint)
 
         pop()
     }
@@ -89,6 +100,11 @@ class Player {
 
         // if player is above half the screen height, scroll the camera
         if (this.y < Scene.height/2) scrollCamera()
+
+        if (this.yVel < 0 && this.y < this.heighestPoint) {
+            this.heighestPoint = this.y
+            updateScore(-this.yVel)
+        }
 
         this.checkCollisions()
     }
@@ -128,13 +144,32 @@ class Player {
      * @param {Number} h height of hitbox to check against player
      */
     checkHitboxOverlap(x, y, w, h) {
+        for (let pointName in this.collisionPoints) {
+            const point = this.collisionPoints[pointName]
+
+            // x overlap
+            if (point.x > x && point.x < x + w) {
+                // y overlap
+                if (point.y > y && point.y < y + h) {
+                    return true
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Checks players bottom left and right collision points against platform 
+     * Parameters are identical to checkHitboxOverlap() function
+     */
+    checkPlatformCollision(x,y,w,h) {
         // perform collision checks in smaller steps for better collision precision
         // and to reduce possibility of fast falling speeds making player fall 
         // through platforms
         const ySteps = 3 
 
-        for (let pointName in this.collisionPoints) {
-            const point = this.collisionPoints[pointName]
+        for (let p = 0; p < this.platformCollisionPoints.length; p++) {
+            const point = this.platformCollisionPoints[p]
 
             // x overlap
             if (point.x > x && point.x < x + w) {
@@ -158,8 +193,9 @@ class Player {
 
         // platforms, only check when moving downwards
         if (this.yVel > 0) {
-            activePlatforms.forEach(p => {
-                if (this.checkHitboxOverlap(p.x, p.y, p.w, p.h)) {
+            visiblePlatforms.forEach(p => {
+                if (this.checkPlatformCollision(p.x, p.y, p.w, p.h)) {
+                    // snaps player to platform (needs to be fixed but use this)
                     // let adjustment = this.y - p.y + this.h/2
                     // this.updateCollisionPoints(0, -adjustment)
                     // this.y = p.y - this.h/2
@@ -170,14 +206,14 @@ class Player {
         }
 
         // enemies
-        activeEnemies.forEach(e => {
+        visibleEnemies.forEach(e => {
             if (this.checkHitboxOverlap(e.x, e.y, e.w, e.h)) {
                 e.onCollision(this)
             }
         })
 
         // powerups
-        activePowerups.forEach(pow => {
+        visiblePowerups.forEach(pow => {
             if (this.checkHitboxOverlap(pow.x, pow.y, pow.w, pow.h)) {
                 pow.pickUp(this)
             }
