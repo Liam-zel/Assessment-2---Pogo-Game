@@ -43,7 +43,7 @@ function generateEnemy() {
     let x = floor(random(Scene.leftBorder, Scene.rightBorder - 80))
     let y = floor(random(Scene.floorHeight - 100, 0))
 
-    activeEnemies.push( enemyTypes[index](x, y) )
+    visibleEnemies.push( enemyTypes[index](x, y) )
 }
 
 
@@ -51,10 +51,10 @@ function generateEnemy() {
  * Checks if any enemies are below the screen, and if so, deletes them
  */
 function deleteEnemies() {
-    activeEnemies.forEach(enemy => {
+    visibleEnemies.forEach(enemy => {
 
         if (enemy.y > Scene.height) {
-            activeEnemies.splice(activeEnemies.indexOf(enemy), 1)
+            visibleEnemies.splice(visibleEnemies.indexOf(enemy), 1)
         }
 
     })
