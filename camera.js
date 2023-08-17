@@ -18,14 +18,12 @@ function scrollCamera() {
 
     let yScroll = -plr.yVel 
     
-    scroll(activePlatforms, yScroll)
-    scroll(activeEnemies, yScroll)
+    scroll(visiblePlatforms, yScroll)
+    scroll(visibleEnemies, yScroll)
+    scroll(visiblePowerups, yScroll)
 
-    // create array from every platforms attachedPowerup property
-    let activePowerups = activePlatforms.map(p => p.attachedPowerup)
-    // removes undefined elements in the array
-    activePowerups = activePowerups.filter(p => p !== undefined)
-    scroll(activePowerups, yScroll)
+    // increases the player's score and gives the amount of pixels the screen scrolled
+    updateScore(yScroll)
 
     Camera.wasScrolled = true
 }
