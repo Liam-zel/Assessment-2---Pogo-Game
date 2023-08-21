@@ -87,14 +87,14 @@ class movingPlatform extends Platform {
     }
 }
 
-
 // -------------------- FUNCTIONS --------------------
 /**
  * Generates a platform with random type, x position and y position
+ * @param {Number} index index of platform from platformTypes[] 
  */
-function generatePlatform() {
+function generatePlatform(index) {
     // platforms can generate too far in advance, this prevents that
-    if (visiblePlatforms.length > 0 && visiblePlatforms[visiblePlatforms.length-1].y < -500) return
+    if (visiblePlatforms.length > 0 && visiblePlatforms[visiblePlatforms.length-1].y < Game.generationMax) return
 
     // array of functions
     const platformTypes = [
@@ -103,15 +103,16 @@ function generatePlatform() {
         (x, y) => {return new movingPlatform(x, y)},
     ]    
     
-    let index = floor(random(platformTypes.length))
-    
     let x = floor(random(Scene.leftBorder, Scene.rightBorder - 80))
     
+    // for the 'all' generation type, which can generate any platform
+    if (index === "all") index = floor(random(platformTypes.length))
+
     // y position of previous platform, otherwise use the floors y position
     let previousY = Scene.floorHeight - 70
     if (visiblePlatforms.length > 0) previousY = visiblePlatforms[visiblePlatforms.length-1].y
     
-    let y = floor(random(previousY, previousY - Game.platformMaxHeightDistance))
+    let y = floor(random(previousY - Game.minPlatformDistance, previousY - Game.maxPlatformDistance))
     
     visiblePlatforms.push( platformTypes[index](x, y) )
             
@@ -123,13 +124,16 @@ function generatePlatform() {
 
 
 /**
- * Generates platforms ahead of the player until a y level threshold
+ * Generates platforms ahead of the player until a y level heightThreshold
+ * @param {Array} possibleIndexes array of allowed indexes when generating platforms
  */
-function createPlatforms() {
+function createPlatforms(possibleIndexes) {
     const threshold = -500 // -500px
-
+    
     do {
-        generatePlatform()
+        let index = possibleIndexes[floor(random(possibleIndexes.length))]
+
+        generatePlatform(index)
     } while (visiblePlatforms[visiblePlatforms.length - 1].y > threshold)
 }
 
