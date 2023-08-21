@@ -16,6 +16,14 @@
         - piano tiles mode
         - horizontal mode
 
+
+
+    BARE MINIMUM:
+        - High score system / leaderboard
+        - Play sounds & music
+        - Use sprites instead of flat shapes and colours
+        - Actual start page & death page
+
 */
 
 // -------------------- GLOBAL VARIABLES --------------------
@@ -23,6 +31,9 @@ let plr // player object, initialised in setup()
 let visiblePlatforms = [] // all currently visible platforms are stored in this array
 let visibleEnemies = [] // all currently visible enemies are stored in this array
 let visiblePowerups = [] // all currently visible powerups are stored in this array
+
+let frameTimes = []
+let avgFrames = 0
 
 // -------------------- PRELOAD --------------------
 // runs once before setup()
@@ -43,7 +54,7 @@ function setup() {
     
     plr = new Player(Scene.width/2, Scene.floorHeight - 20)
 
-    createPlatforms()
+    createObstacles()
 }
 
 // -------------------- DRAW --------------------
@@ -51,12 +62,7 @@ function setup() {
 function draw() {
     background(220)
 
-    plr.draw()
-    // plr.debugDraw()
-
-    plr.update()
-    plr.move()
-
+    // --- platforms, powerups, enemies ---
     visiblePlatforms.forEach(platform => {
         platform.draw()
         platform.update()
@@ -73,13 +79,28 @@ function draw() {
     // checks for enemies below the screen and deletes them
     deleteEnemies()
 
+    // --- player ---
+    plr.draw()
+    // plr.debugDraw()
+
+    plr.update()
+    plr.move()
+
+
+    // --- UI ---
     // draws current score to screen
     drawScore()
  
-    if (Camera.wasScrolled) createPlatforms()
+    drawWindowBorder()
+
+    if (Camera.wasScrolled) createObstacles()
     Camera.wasScrolled = false
 
-    drawWindowBorder()
+    frameTimes.push(frameRate())
+    avgFrames = frameTimes.reduce((a,b) => a += b)
+    avgFrames /= frameTimes.length
+
+    if (frameTimes.length > 10) frameTimes.splice(0,1)
 }
 
 // -------------------- KEYPRESSED --------------------
@@ -87,14 +108,20 @@ function draw() {
 function keyPressed() {
 
     if (keyCode === keys.space) {
-        plr.jump()
+        // plr.jump()
     }
 
     if (keyCode === keys.leftArrow) {
-        frameRate(0)
+        if (ceil(frameRate()) > 10) frameRate(0)
+        else if (floor(frameRate()) === 0) frameRate(60)
     }
 
-    if (keyCode === keys.rightArrow) {
-        frameRate(60)
+    if (keyCode === keys.upArrow) {
+        frameRate(0)
+        draw()
+    }
+
+    if (keyCode === keys.w || keyCode === keys.space) {
+        plr.shoot()
     }
 }
