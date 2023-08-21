@@ -16,8 +16,34 @@ const Game = {
     },
 
     powerupChance: 100, // 1 in powerupChance for a platform to have a powerup generated with it
+    powerupCombos: {
+        all: ["all"],
+        noMachineGun: [0, 1],
+        onlyMachineGun: [2],
+    },
+    availablePowerups: [],
 
-    platformMaxHeightDistance: 130,
+    maxPlatformDistance: 130,
+    minPlatformDistance: 0,
+
+    enemySpacing: 1000,
+
+    generationMax: -500,
+    generationTypes: {
+        /* Platforms */
+        all: ["all"],
+        onlyGreen: [0],
+        greenAndBreaking: [0,1],
+        onlyMoving: [2],
+        movingAndBreaking: [1,2],
+
+        /* Enemies */
+        basicEnemy: [0],
+        fakePlatform: [1],
+    },
+
+
+    floorKills: false,
 }
 
 
@@ -45,6 +71,58 @@ function drawScore() {
     textAlign(CENTER)
     
     text(Game.score + "m", windowWidth/2, Game.scoreTextStyling.yPos)
+    text(floor(avgFrames) + "fps", windowWidth/2, Scene.height - Game.scoreTextStyling.yPos)
 
     pop()
+}
+
+
+/**
+ * Generates all platforms, powerups and enemies in advance of the player
+ * This generation is based off the players score
+ */
+function createObstacles() {
+    
+    if (Game.score < 1000) {
+        Game.powerupChance = 35
+
+        setAvailablePowerups(Game.powerupCombos.noMachineGun)
+        createPlatforms(Game.generationTypes.onlyGreen)
+        return
+    }
+
+    if (Game.score < 3000) {
+        Game.powerupChance = 100
+
+        createPlatforms(Game.generationTypes.greenAndBreaking)
+        return
+    }
+
+    if (Game.score < 5500) {
+        createPlatforms(Game.generationTypes.all)
+        return
+    }
+
+    if (Game.score < 10000) {
+        Game.enemySpacing = 700
+        Game.powerupChance = 120
+
+        createPlatforms(Game.generationTypes.onlyMoving)
+        createEnemies(Game.generationTypes.basicEnemy)
+
+        return
+    }
+
+    if (Game.score < 99999) {
+        Game.enemySpacing = 300
+        Game.maxPlatformDistance = 100
+        Game.minPlatformDistance = 100
+        Game.powerupChance = 40
+
+        setAvailablePowerups(Game.powerupCombos.onlyMachineGun)
+        createPlatforms(Game.generationTypes.onlyGreen)
+        createEnemies(Game.generationTypes.fakePlatform)
+
+        return
+    }
 }
