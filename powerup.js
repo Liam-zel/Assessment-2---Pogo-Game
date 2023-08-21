@@ -96,12 +96,20 @@ class Jetpack extends Powerup {
     constructor(platform) {
         super(platform)
 
-        this.boost = -45
-        this.duration = 3000
+        this.boost = -40
+        this.duration = 2500
     }
 
     effect(plr) {
+        plr.inSquash = false
         plr.yVel = this.boost
+    }
+
+    onPickUp(plr) {
+
+        visibleEnemies.forEach(enemy => {
+            if (enemy.y < 0) visibleEnemies.splice(visibleEnemies.indexOf(enemy), 1)
+        })
     }
 }
 
@@ -131,24 +139,68 @@ class SpringBoots extends Powerup {
 }
 
 
+/**
+ * Auto fires bullets in all directions
+ */
+class MachineGun extends Powerup {
+    constructor(platform) {
+        super(platform)
+
+        this.col = '#EEB273'
+
+        this.w = 40
+        this.h = 40
+
+        this.bulletCount = 0
+        this.rotationSpeed = 20
+
+        this.duration = 7000
+    }
+
+    effect(plr) {
+        plr.shoot()
+        let bullet = plr.projectiles[plr.projectiles.length - 1]
+
+        // multiplying by PI/180 converts degrees to radians
+        bullet.xVel = 25 * Math.cos((this.bulletCount * this.rotationSpeed) * (Math.PI / 180))
+        bullet.yVel = 25 * Math.sin((this.bulletCount * this.rotationSpeed) * (Math.PI / 180))
+
+        this.bulletCount++
+    }
+}
+
+
 // -------------------- FUNCTIONS --------------------
 
 /**
  * Creates and attaches a new powerup object to the given platform argument
  * @param {Object} platform a given platform object to have a powerup attached to it
+ * @param {Number} index to specify an index from powerups[], rather than choose at random
  */
 function generatePowerup(platform) {
+    let index = Game.availablePowerups[floor(random(Game.availablePowerups.length))]
+
     // array of functions
     const powerups = [
-        // (p) => {return new Jetpack(p)},
+        (p) => {return new Jetpack(p)},
         (p) => {return new SpringBoots(p)},
+        (p) => {return new MachineGun(p)},
     ] 
 
-    let index = floor(random(powerups.length))
+    // for the 'all' generation type, which can generate any powerup
+    if (index === "all") index = floor(random(powerup.length))
 
     let powerup = powerups[index](platform)
     powerup.init()
 
     platform.attachedPowerup = powerup
     visiblePowerups.push(powerup)
+}
+
+
+/**
+ * @param {Array} possibleIndexes 
+ */
+function setAvailablePowerups(possibleIndexes) {
+    Game.availablePowerups = possibleIndexes
 }
