@@ -22,8 +22,11 @@ function scrollCamera() {
     scroll(visibleEnemies, yScroll)
     scroll(visiblePowerups, yScroll)
 
+    scroll(plr.projectiles, yScroll)
+
     // increases the player's score and gives the amount of pixels the screen scrolled
     updateScore(yScroll)
 
     Camera.wasScrolled = true
+    Game.floorKills = true
 }
