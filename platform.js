@@ -128,7 +128,7 @@ function generatePlatform(index) {
  * @param {Array} possibleIndexes array of allowed indexes when generating platforms
  */
 function createPlatforms(possibleIndexes) {
-    const threshold = -500 // -500px
+    const threshold = -150 // -150px
     
     do {
         let index = possibleIndexes[floor(random(possibleIndexes.length))]

@@ -116,7 +116,7 @@ function createEnemies(possibleIndexes) {
     // prevents player rocketing straight into an enemy
     if (plr.yVel < - 30) return
 
-    const threshold = -500
+    const threshold = -150 // 150 px above screen
     let index = possibleIndexes[floor(random(possibleIndexes.length))]
 
     do {
