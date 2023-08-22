@@ -86,7 +86,7 @@ class Player {
         push()
 
         rectMode(CENTER)
-        stroke(50,220,200)
+        stroke(50, 220, 200)
         strokeWeight(9)
 
         point(this.xTarget, this.y)
@@ -146,6 +146,7 @@ class Player {
 
         if (this.stretch > this.maxStretch) this.stretch = this.maxStretch
 
+        // this makes sure that the player's area (width x height) stays the same
         let area = this.w * this.h
         this.squash = (area / (this.h + this.stretch)) - this.w
     }
@@ -158,6 +159,7 @@ class Player {
     updateSquash() {
         this.squash = Math.pow(this.yVel/7, 2)
 
+        // this makes sure that the player's area (width x height) stays the same
         let area = this.w * this.h
         this.stretch = (area / (this.w + this.squash)) - this.h
 
@@ -293,6 +295,10 @@ class Player {
      */
     jump() {
         this.inSquash = true
+
+        if (this.jumpPower > 20) playSound(Sounds.highJump)
+        else playSound(Sounds.lowJump)
+
         this.yVel = -this.jumpPower
     }
 
@@ -301,7 +307,8 @@ class Player {
      * 
      */
     kill(killer) {
-        // location.reload() // reload page
+        uploadScore()
+        location.reload() // reload page
     }
 
 
@@ -377,7 +384,7 @@ class Projectile {
 
         if (this.x < Scene.leftBorder || this.x > Scene.rightBorder) plr.projectiles.splice(plr.projectiles.indexOf(this), 1)
 
-        if (this.y < 0) plr.projectiles.splice(plr.projectiles.indexOf(this), 1)
+        if (this.y < 0 || this.y > Scene.floorHeight) plr.projectiles.splice(plr.projectiles.indexOf(this), 1)
 
         this.checkEnemyCollision()
     }
