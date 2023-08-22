@@ -98,15 +98,24 @@ class Jetpack extends Powerup {
 
         this.boost = -40
         this.duration = 2500
+
+        this.effectCount = 0
     }
 
     effect(plr) {
         plr.inSquash = false
         plr.yVel = this.boost
+
+        if (this.effectCount % 2 === 0) playSound(Sounds.jetpack1)
+        this.effectCount++
     }
 
-    onPickUp(plr) {
+    deactivate() {
+        playSound(Sounds.jetpack2)
+        playSound(Sounds.jetpack3)
+    }
 
+    onPickUp() {
         visibleEnemies.forEach(enemy => {
             if (enemy.y < 0) visibleEnemies.splice(visibleEnemies.indexOf(enemy), 1)
         })
@@ -188,7 +197,7 @@ function generatePowerup(platform) {
     ] 
 
     // for the 'all' generation type, which can generate any powerup
-    if (index === "all") index = floor(random(powerup.length))
+    if (index === "all") index = floor(random(powerups.length))
 
     let powerup = powerups[index](platform)
     powerup.init()
