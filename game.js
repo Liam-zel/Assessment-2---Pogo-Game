@@ -28,7 +28,7 @@ const Game = {
 
     enemySpacing: 1000,
 
-    generationMax: -500,
+    generationMax: -150,
     generationTypes: {
         /* Platforms */
         all: ["all"],
@@ -71,6 +71,7 @@ function drawScore() {
     textAlign(CENTER)
     
     text(Game.score + "m", windowWidth/2, Game.scoreTextStyling.yPos)
+    if (avgFrames < 40) fill(255, 0, 0)
     text(floor(avgFrames) + "fps", windowWidth/2, Scene.height - Game.scoreTextStyling.yPos)
 
     pop()
@@ -82,7 +83,7 @@ function drawScore() {
  * This generation is based off the players score
  */
 function createObstacles() {
-    
+
     if (Game.score < 1000) {
         Game.powerupChance = 35
 
@@ -92,7 +93,7 @@ function createObstacles() {
     }
 
     if (Game.score < 3000) {
-        Game.powerupChance = 100
+        Game.powerupChance = 80
 
         createPlatforms(Game.generationTypes.greenAndBreaking)
         return
@@ -105,11 +106,11 @@ function createObstacles() {
 
     if (Game.score < 10000) {
         Game.enemySpacing = 700
-        Game.powerupChance = 120
-
+        Game.powerupChance = 90
+        
+        setAvailablePowerups(Game.powerupCombos.onlyMachineGun)
         createPlatforms(Game.generationTypes.onlyMoving)
         createEnemies(Game.generationTypes.basicEnemy)
-
         return
     }
 
