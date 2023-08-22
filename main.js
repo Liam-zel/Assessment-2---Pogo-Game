@@ -38,7 +38,7 @@ let avgFrames = 0
 // -------------------- PRELOAD --------------------
 // runs once before setup()
 function preload() {
-
+    loadSoundFiles()
 }
 
 // -------------------- SETUP --------------------
@@ -55,6 +55,8 @@ function setup() {
     plr = new Player(Scene.width/2, Scene.floorHeight - 20)
 
     createObstacles()
+
+    // initialiseDatabase()
 }
 
 // -------------------- DRAW --------------------
@@ -100,7 +102,7 @@ function draw() {
     avgFrames = frameTimes.reduce((a,b) => a += b)
     avgFrames /= frameTimes.length
 
-    if (frameTimes.length > 10) frameTimes.splice(0,1)
+    if (frameTimes.length > 5) frameTimes.splice(0,1)
 }
 
 // -------------------- KEYPRESSED --------------------
@@ -124,4 +126,10 @@ function keyPressed() {
     if (keyCode === keys.w || keyCode === keys.space) {
         plr.shoot()
     }
+}
+
+
+// google made a change that prevented sounds from playing without consent, this is a workaround
+function touchStarted() {
+    getAudioContext().resume() 
 }
