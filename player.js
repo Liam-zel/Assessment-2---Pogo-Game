@@ -310,7 +310,7 @@ class Player {
      */
     kill(killer) {
         uploadScore()
-        location.reload() // reload page
+        changeGameState(GameState.states.death)
     }
 
 
