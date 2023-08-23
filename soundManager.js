@@ -13,11 +13,14 @@ const Sounds = {
     shoot: ['sounds/shoot 1.wav', 'sounds/shoot 2.wav'],
     projectile: ['sounds/projectile.wav'],
 
+    // todo: enmemy isnt loading, maybe make preload async and await for a load
+    enemyDeath: ['enemy death 1.wav', 'enemy death 2.wav'],
+
     soundData: {
         loaded: [],
         globalVolume: 0.1,
         
-        // activeSounds: [], // all currently playing sounds
+        activeSounds: [], // all currently playing sounds
         // maxSounds: 16
     }
 }
@@ -53,6 +56,7 @@ function playSound(sound) {
     let loaded = Sounds.soundData.loaded
     loaded.forEach(sound => {
         if (sound._src === chosenSound) {
+            Sounds.soundData.activeSounds.push(sound)
             sound.play()
             return
         }
