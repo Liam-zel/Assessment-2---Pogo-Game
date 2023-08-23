@@ -106,13 +106,12 @@ class Jetpack extends Powerup {
         plr.inSquash = false
         plr.yVel = this.boost
 
-        if (this.effectCount % 2 === 0) playSound(Sounds.jetpack1)
+        if (this.effectCount % 2 === 0) playSound(Sounds.jetpackStart)
         this.effectCount++
     }
 
     deactivate() {
-        playSound(Sounds.jetpack2)
-        playSound(Sounds.jetpack3)
+        playSound(Sounds.jetpackEnd)
     }
 
     onPickUp() {
@@ -164,10 +163,12 @@ class MachineGun extends Powerup {
         this.rotationSpeed = 20
 
         this.duration = 7000
+
+        // this.createSoundEffect = true
     }
 
     effect(plr) {
-        plr.shoot()
+        plr.shoot(true)
         let bullet = plr.projectiles[plr.projectiles.length - 1]
 
         // multiplying by PI/180 converts degrees to radians
