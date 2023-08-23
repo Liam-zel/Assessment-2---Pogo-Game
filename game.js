@@ -18,6 +18,7 @@ const Game = {
     // --- initial game values ---
     // game values that change have to have their initial values stored here
     initialGameValues: {
+        score: 0,
         powerupChance: 100, // 1 in powerupChance for a platform to have a powerup generated with it
 
         maxPlatformDistance: 130,
@@ -31,8 +32,8 @@ const Game = {
     powerupChance: undefined,
     powerupCombos: {
         all: ["all"],
-        noMachineGun: [0, 1],
-        onlyMachineGun: [2],
+        noBubbleBlower: [0, 1],
+        onlyBubbleBlower: [2],
     },
     availablePowerups: [],
 
@@ -97,31 +98,31 @@ function drawScore() {
  */
 function createObstacles() {
 
-    if (Game.score < 1000) {
-        Game.powerupChance = 35
+        if (Game.score < 1000) {
+            Game.powerupChance = 35
 
-        setAvailablePowerups(Game.powerupCombos.noMachineGun)
-        createPlatforms(Game.generationTypes.onlyGreen)
-        return
-    }
+            setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
+            createPlatforms(Game.generationTypes.onlyGreen)
+            return
+        }
 
-    if (Game.score < 3000) {
-        Game.powerupChance = 80
+        if (Game.score < 3000) {
+            Game.powerupChance = 80
 
-        createPlatforms(Game.generationTypes.greenAndBreaking)
-        return
-    }
+            createPlatforms(Game.generationTypes.greenAndBreaking)
+            return
+        }
 
-    if (Game.score < 5500) {
-        createPlatforms(Game.generationTypes.all)
-        return
-    }
+        if (Game.score < 5500) {
+            createPlatforms(Game.generationTypes.all)
+            return
+        }
 
     if (Game.score < 10000) {
         Game.enemySpacing = 700
         Game.powerupChance = 60
         
-        setAvailablePowerups(Game.powerupCombos.onlyMachineGun)
+        setAvailablePowerups(Game.powerupCombos.onlyBubbleBlower)
         createPlatforms(Game.generationTypes.onlyMoving)
         createEnemies(Game.generationTypes.basicEnemy)
         return
@@ -133,7 +134,7 @@ function createObstacles() {
         Game.minPlatformDistance = 100
         Game.powerupChance = 40
 
-        setAvailablePowerups(Game.powerupCombos.onlyMachineGun)
+        setAvailablePowerups(Game.powerupCombos.onlyBubbleBlower)
         createPlatforms(Game.generationTypes.onlyGreen)
         createEnemies(Game.generationTypes.fakePlatform)
 
@@ -151,8 +152,14 @@ function initaliseGame() {
         Game[property] = initialValues[property]
     }
 
+    Sounds.soundData.activeSounds.forEach(sound => {
+        // sound.stop() and soud.mute() don't work due to
+        // errors with reactjs (I think p5js uses react)
+        sound.volume(0)
+    })
+
     // set global variables
-    plr = undefined
+    plr = new Player()
     visiblePlatforms = []
     visibleEnemies = [] 
     visiblePowerups = [] 
