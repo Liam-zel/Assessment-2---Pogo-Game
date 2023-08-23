@@ -106,7 +106,7 @@ function createObstacles() {
 
     if (Game.score < 10000) {
         Game.enemySpacing = 700
-        Game.powerupChance = 90
+        Game.powerupChance = 60
         
         setAvailablePowerups(Game.powerupCombos.onlyMachineGun)
         createPlatforms(Game.generationTypes.onlyMoving)
