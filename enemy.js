@@ -10,13 +10,14 @@ class Enemy {
         this.w = 40
         this.h = 50
 
-        this.col = '#FF4040'
+        // this.col = '#FF4040'
+        this.sprite = Sprites.basicEnemy
     }
 
     draw() {
         strokeWeight(3)
-        fill(this.col)
-        rect(this.x, this.y, this.w, this.h)
+        // fill(this.col)
+        sprite(this.sprite, this.x, this.y, this.w, this.h)
     }
 
 
@@ -35,7 +36,9 @@ class Enemy {
 
 
 /**
- * FAKE PLATFORM TODO
+ * FAKE PLATFORM
+ * TODO:
+ *  - maybe you just fall through it and it doesn't kill you?
  */
 class FakePlatform extends Enemy {
     constructor(x,y) {
