@@ -159,7 +159,7 @@ class SpringBoots extends Powerup {
 /**
  * Auto fires bullets in all directions
  */
-class MachineGun extends Powerup {
+class BubbleBlower extends Powerup {
     constructor(platform) {
         super(platform)
 
@@ -168,7 +168,7 @@ class MachineGun extends Powerup {
         this.w = 40
         this.h = 40
 
-        this.sprite = Sprites.machineGun
+        this.sprite = Sprites.bubbleBlower
 
         this.bulletCount = 0
         this.rotationSpeed = 20
@@ -205,7 +205,7 @@ function generatePowerup(platform) {
     const powerups = [
         (p) => {return new Jetpack(p)},
         (p) => {return new SpringBoots(p)},
-        (p) => {return new MachineGun(p)},
+        (p) => {return new BubbleBlower(p)},
     ] 
 
     // for the 'all' generation type, which can generate any powerup
