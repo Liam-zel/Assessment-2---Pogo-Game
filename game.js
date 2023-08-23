@@ -15,7 +15,20 @@ const Game = {
         yPos: 60
     },
 
-    powerupChance: 100, // 1 in powerupChance for a platform to have a powerup generated with it
+    // --- initial game values ---
+    // game values that change have to have their initial values stored here
+    initialGameValues: {
+        powerupChance: 100, // 1 in powerupChance for a platform to have a powerup generated with it
+
+        maxPlatformDistance: 130,
+        minPlatformDistance: 0,
+
+        enemySpacing: 1000,
+
+        floorKills: false
+    },
+
+    powerupChance: undefined,
     powerupCombos: {
         all: ["all"],
         noMachineGun: [0, 1],
@@ -23,10 +36,10 @@ const Game = {
     },
     availablePowerups: [],
 
-    maxPlatformDistance: 130,
-    minPlatformDistance: 0,
+    maxPlatformDistance: undefined,
+    minPlatformDistance: undefined,
 
-    enemySpacing: 1000,
+    enemySpacing: undefined,
 
     generationMax: -150,
     generationTypes: {
@@ -43,7 +56,7 @@ const Game = {
     },
 
 
-    floorKills: false,
+    floorKills: undefined,
 }
 
 
@@ -126,4 +139,22 @@ function createObstacles() {
 
         return
     }
+}
+
+
+
+function initaliseGame() {
+    // set game property values to their default values 
+    const initialValues = Game.initialGameValues
+
+    for (let property in initialValues) {
+        Game[property] = initialValues[property]
+    }
+
+    // set global variables
+    plr = undefined
+    visiblePlatforms = []
+    visibleEnemies = [] 
+    visiblePowerups = [] 
+    activeButtons = [] 
 }
