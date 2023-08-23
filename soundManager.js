@@ -1,31 +1,67 @@
+// -------------------- SOUNDS OBJECT --------------------
+/**
+ * Global sounds object which stores sound file urls and sound data
+ */
 const Sounds = {
-    highJump: 'sounds/High jump.wav',
-    lowJump: 'sounds/Low jump.wav',
+    highJump: ['sounds/high jump 1.wav', 'sounds/high jump 2.wav'],
 
-    jetpack1: 'sounds/jetpack 1.wav',
-    jetpack2: 'sounds/jetpack 2.wav',
-    jetpack3: 'sounds/jetpack 3.wav',
+    lowJump: ['sounds/low jump.wav'],
 
-    loaded: [],
-}
+    jetpackStart: ['sounds/jetpack 1.wav'],
+    jetpackEnd: ['sounds/jetpack 2.wav', 'sounds/jetpack 3.wav'],
 
-function loadSoundFiles() {
-    for (let sound in Sounds) {
-        if (sound === "loaded") break;
+    shoot: ['sounds/shoot 1.wav', 'sounds/shoot 2.wav'],
+    projectile: ['sounds/projectile.wav'],
 
-        let s = loadSound(Sounds[sound])
-        s.setVolume(0.02)
-        Sounds.loaded.push(s)
-
+    soundData: {
+        loaded: [],
+        
+        // activeSounds: [], // all currently playing sounds
+        // maxSounds: 16
     }
 }
 
-function playSound(sound) {
+// -------------------- FUNCTIONS --------------------
 
-    Sounds.loaded.forEach(s => {
-        if (s.url === sound) {
-            s.play()
+/**
+ * Goes through all urls in Sounds object, loads them and lowers their volume
+ */
+function loadSoundFiles() {
+
+    Howler.volume(0.1)
+
+    for (let arrName in Sounds) {
+        if (arrName === "soundData") continue
+
+        Sounds[arrName].forEach(sound => {
+            Sounds.soundData.loaded.push(new Howl({src: sound}))
+        })
+
+    }
+
+}
+
+
+/**
+ * Plays specified sound
+ */
+function playSound(sound) {
+    let chosenSound = sound[floor(random(sound.length))]
+
+    let loaded = Sounds.soundData.loaded
+    loaded.forEach(sound => {
+        if (sound._src === chosenSound) {
+            sound.play()
             return
         }
     })
+}
+
+/**
+ * Deletes sounds finished playing and makes sure there are no more
+ * than maxSounds amount of sounds playing concurrently
+ */
+function deleteSounds() {
+
+
 }
