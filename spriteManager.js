@@ -1,4 +1,4 @@
-// -------------------- SOUNDS OBJECT --------------------
+// -------------------- SPRITES OBJECT --------------------
 /**
  * Global Sprites object which stores sprite file urls and sprite data
  */
@@ -12,6 +12,8 @@ const Sprites = {
     springBoots: 'sprites/spring boots.png',
 
     background: 'sprites/sky background.png',
+
+    playButton: 'sprites/play.png',
 
     spriteData: {
         loaded: []
