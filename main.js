@@ -20,17 +20,19 @@
 
     BARE MINIMUM:
         - High score system / leaderboard (half done, need start and end screen)
-        - Play sounds & music (done)
         - Use sprites instead of flat shapes and colours
-        - Actual start page & death page
+        - Play sounds & music (done)
+        - Actual start page & death page (done)
 
 */
 
 // -------------------- GLOBAL VARIABLES --------------------
-let plr // player object, initialised in setup()
-let visiblePlatforms = [] // all currently visible platforms are stored in this array
-let visibleEnemies = [] // all currently visible enemies are stored in this array
-let visiblePowerups = [] // all currently visible powerups are stored in this array
+let plr // storess player object
+let visiblePlatforms = [] // all currently visible platforms
+let visibleEnemies = [] // all currently visible enemies 
+let visiblePowerups = [] // all currently visible powerups
+
+let activeButtons = [] // all current active buttons
 
 let frameTimes = []
 let avgFrames = 0
@@ -42,6 +44,7 @@ function preload() {
 
     loadSoundFiles()
     loadSpriteFiles()
+    // initialiseDatabase()
 
     console.log("load time: " + (Date.now() - t) + "ms")
 }
@@ -50,68 +53,19 @@ function preload() {
 // setup() runs once before draw()
 function setup() {
     const sceneWidth = 600 
-
     
     setSceneDimensions(sceneWidth, windowHeight)
     setFloor(windowHeight)
     
-    createCanvas(windowWidth, windowHeight);
-    
-    plr = new Player(Scene.width/2, Scene.floorHeight - 20)
+    createCanvas(windowWidth, windowHeight) 
 
-    createObstacles()
-
-    // initialiseDatabase()
+    changeGameState(GameState.states.start)
 }
 
 // -------------------- DRAW --------------------
 // draw() runs every frame
 function draw() {
-    // background(220)
-    sprite(Sprites.background, Scene.leftBorder, 0, Scene.width, Scene.height)
-
-    // --- platforms, powerups, enemies ---
-    visiblePlatforms.forEach(platform => {
-        platform.draw()
-        platform.update()
-    })
-
-    // checks for platforms below the screen and deletes them
-    deletePlatforms() 
-
-    visibleEnemies.forEach(enemy => {
-        enemy.draw()
-        enemy.update()
-    })
-    
-    // checks for enemies below the screen and deletes them
-    deleteEnemies()
-
-    // --- player ---
-    plr.draw()
-    // plr.debugDraw()
-
-    plr.update()
-    plr.move()
-
-    // --- sounds ---
-    // checks for finished sounds and delets them
-    // deleteSounds()
-
-    // --- UI ---
-    // draws current score to screen
-    drawScore()
- 
-    drawWindowBorder()
-
-    if (Camera.wasScrolled) createObstacles()
-    Camera.wasScrolled = false
-
-    frameTimes.push(frameRate())
-    avgFrames = frameTimes.reduce((a,b) => a += b)
-    avgFrames /= frameTimes.length
-
-    if (frameTimes.length > 5) frameTimes.splice(0,1)
+    GameState.currentState.function()
 }
 
 // -------------------- KEYPRESSED --------------------
@@ -135,6 +89,14 @@ function keyPressed() {
     if (keyCode === keys.w || keyCode === keys.space) {
         plr.shoot()
     }
+}
+
+// -------------------- MOUSECLICKED --------------------
+// runes when the mouse is clicked
+function mouseClicked() {
+    activeButtons.forEach(button => {
+        button.checkClicked()
+    })
 }
 
 
