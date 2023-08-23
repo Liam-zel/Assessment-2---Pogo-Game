@@ -88,6 +88,9 @@ function draw() {
     plr.update()
     plr.move()
 
+    // --- sounds ---
+    // checks for finished sounds and delets them
+    // deleteSounds()
 
     // --- UI ---
     // draws current score to screen
@@ -131,5 +134,6 @@ function keyPressed() {
 
 // google made a change that prevented sounds from playing without consent, this is a workaround
 function touchStarted() {
-    getAudioContext().resume() 
+    let ctx = new AudioContext
+    ctx.resume()
 }
