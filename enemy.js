@@ -30,6 +30,7 @@ class Enemy {
 
 
     kill() {
+        playSound(Sounds.enemyDeath)
         visibleEnemies.splice(visibleEnemies.indexOf(this), 1)
     }
 }
