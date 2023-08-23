@@ -8,8 +8,10 @@ const Sprites = {
     basicEnemy: 'sprites/enemy.png',
 
     jetpack: 'sprites/jetpack.png',
-    machineGun: 'sprites/machine gun.png',
+    bubbleBlower: 'sprites/bubble blower.png',
     springBoots: 'sprites/spring boots.png',
+
+    projectile: 'sprites/projectile.png',
 
     background: 'sprites/sky background.png',
 
