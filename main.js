@@ -19,8 +19,8 @@
 
 
     BARE MINIMUM:
-        - High score system / leaderboard
-        - Play sounds & music
+        - High score system / leaderboard (half done, need start and end screen)
+        - Play sounds & music (done)
         - Use sprites instead of flat shapes and colours
         - Actual start page & death page
 
@@ -39,6 +39,7 @@ let avgFrames = 0
 // runs once before setup()
 function preload() {
     loadSoundFiles()
+    loadSpriteFiles()
 }
 
 // -------------------- SETUP --------------------
@@ -62,7 +63,8 @@ function setup() {
 // -------------------- DRAW --------------------
 // draw() runs every frame
 function draw() {
-    background(220)
+    // background(220)
+    sprite(Sprites.background, Scene.leftBorder, 0, Scene.width, Scene.height)
 
     // --- platforms, powerups, enemies ---
     visiblePlatforms.forEach(platform => {
