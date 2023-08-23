@@ -28,6 +28,11 @@ class Player {
         this.yVel = 0
         this.xVel = 0
 
+        // x pos the player is moving to
+        this.xTarget = x + Scene.xOffset 
+
+        this.dead = false
+
         this.activePowerups = []
 
         this.projectiles = []
@@ -53,9 +58,6 @@ class Player {
             this.collisionPoints.bottomMiddle,
             this.collisionPoints.bottomRight
         ]
-
-        // x pos the player is moving to
-        this.xTarget = x + Scene.xOffset 
     }
 
     // -------------------- FUNCTIONS -------------------- 
@@ -280,7 +282,7 @@ class Player {
 
         // floor
         if (this.y + this.h/2 > Scene.floorHeight) {
-            if (Game.floorKills) this.kill('FLOOOOOOOR')
+            if (Game.floorKills) return this.kill('FLOOOOOOOR')
 
             let adjustment = this.y - Scene.floorHeight + this.h/2
             this.updateCollisionPoints(0, -adjustment)
@@ -309,7 +311,10 @@ class Player {
      * 
      */
     kill(killer) {
+        this.dead = true
+
         uploadScore()
+        
         changeGameState(GameState.states.death)
     }
 
@@ -368,16 +373,20 @@ class Projectile {
 
         this.size = 10
 
-        this.col = '#F5D1D2'
+        this.sprite = Sprites.projectile
     }
 
 
     draw() {
         push()
 
-        strokeWeight(5)
-        fill(this.col)
+        strokeWeight(3)
+        noFill()
         circle(this.x, this.y, this.size)
+
+        imageMode(CENTER)
+
+        sprite(this.sprite, this.x, this.y, this.size, this.size)
 
         pop()
     }
