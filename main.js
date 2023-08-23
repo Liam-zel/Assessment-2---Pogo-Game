@@ -38,8 +38,12 @@ let avgFrames = 0
 // -------------------- PRELOAD --------------------
 // runs once before setup()
 function preload() {
+    let t = Date.now()
+
     loadSoundFiles()
     loadSpriteFiles()
+
+    console.log("load time: " + (Date.now() - t) + "ms")
 }
 
 // -------------------- SETUP --------------------
