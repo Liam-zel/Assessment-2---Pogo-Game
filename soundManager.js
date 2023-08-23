@@ -15,6 +15,7 @@ const Sounds = {
 
     soundData: {
         loaded: [],
+        globalVolume: 0.1,
         
         // activeSounds: [], // all currently playing sounds
         // maxSounds: 16
@@ -24,17 +25,18 @@ const Sounds = {
 // -------------------- FUNCTIONS --------------------
 
 /**
- * Goes through all urls in Sounds object, loads them and lowers their volume
+ * Goes through all urls in the Sounds object and loads them
+ * Also sets global volume
  */
 function loadSoundFiles() {
 
-    Howler.volume(0.1)
+    Howler.volume(Sounds.soundData.globalVolume)
 
     for (let arrName in Sounds) {
         if (arrName === "soundData") continue
 
-        Sounds[arrName].forEach(sound => {
-            Sounds.soundData.loaded.push(new Howl({src: sound}))
+        Sounds[arrName].forEach(soundUrl => {
+            Sounds.soundData.loaded.push(new Howl({src: soundUrl}))
         })
 
     }
