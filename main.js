@@ -1,4 +1,10 @@
-/* Game design notes
+/* 
+    TODO:
+        - dont have GameState, Scene etc, as their own global objects
+            put them under Game 
+            e.g "const Scene = {}" --> "Game.Scene = {}"
+
+Game design notes
 
     - Different enemies and platforms need to have different appearance apart from colour
         - better for colour blind people
@@ -17,17 +23,10 @@
         - horizontal mode
 
 
-
-    BARE MINIMUM:
-        - High score system / leaderboard (half done, need start and end screen)
-        - Use sprites instead of flat shapes and colours
-        - Play sounds & music (done)
-        - Actual start page & death page (done)
-
 */
 
 // -------------------- GLOBAL VARIABLES --------------------
-let plr // storess player object
+let plr = new Player()// storess player object
 let visiblePlatforms = [] // all currently visible platforms
 let visibleEnemies = [] // all currently visible enemies 
 let visiblePowerups = [] // all currently visible powerups
