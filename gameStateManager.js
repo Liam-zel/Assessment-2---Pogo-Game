@@ -25,14 +25,18 @@ const GameState = {
             function: runGame
         },
         settings: {
-            initState: () => {},
-            function: () => {}
+            initState: () => {
+
+            },
+            function: () => {
+
+            }
         },
         death: {
             initState: () => {
-                changeGameState(GameState.states.start)
+                
             },
-            function: () => {console.log('dead', plr)}
+            function: playerDeath
         },
     },
 
@@ -123,4 +127,9 @@ function runGame() {
     avgFrames /= frameTimes.length
 
     if (frameTimes.length > 5) frameTimes.splice(0,1)
+}
+
+
+function playerDeath() {
+    changeGameState(GameState.states.start)
 }
