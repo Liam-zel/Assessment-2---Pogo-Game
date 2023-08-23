@@ -64,12 +64,14 @@ class Player {
      */
     draw() {
         strokeWeight(4)
-        rectMode(CENTER) // player is drawn from the center of his x,y position 
+        imageMode(CENTER) // player is drawn from the center of his x,y position 
 
-        fill(this.col)
-        rect(this.x, this.y, this.w + this.squash, this.h + this.stretch)
+        // fill(this.col)
+        // rect(this.x, this.y, this.w + this.squash, this.h + this.stretch)
 
-        rectMode(CORNER) // everything else is drawn from the top left, using their x,y position
+        sprite(Sprites.player, this.x, this.y, this.w + this.squash, this.h + this.stretch)
+
+        imageMode(CORNER) // everything else is drawn from the top left, using their x,y position
 
         // todo: fix flickering
         this.projectiles.forEach(proj => {
@@ -341,9 +343,13 @@ class Player {
 
     /**
      * Shoots an enemy killing projectile upwards
+     * @param {Boolean} isGun Plays bullet sound effect if true
      */
-    shoot() {
+    shoot(isGun) {
         this.projectiles.push(new Projectile(this.x, this.y))
+
+        if (isGun) playSound(Sounds.shoot)
+        else playSound(Sounds.projectile)
     }
 }
 

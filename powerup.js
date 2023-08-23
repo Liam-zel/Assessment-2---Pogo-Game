@@ -7,14 +7,15 @@ class Powerup {
         this.x = platform.x + platform.w / 2
         this.y = platform.y - platform.h * 2
 
-        this.w = 20
-        this.h = 40
+        this.w
+        this.h
 
         this.duration // how long the powerup is active for in ms
 
         this.pickedUp = false
 
-        this.col = '#443133'
+        // this.col = '#443133'
+        this.sprite
 
         this.parentPlatform = platform
     }
@@ -29,8 +30,9 @@ class Powerup {
     
     draw() {
         strokeWeight(3)
-        fill(this.col)
-        rect(this.x, this.y, this.w, this.h)
+        // fill(this.col)
+        // rect(this.x, this.y, this.w, this.h)
+        sprite(this.sprite, this.x, this.y, this.w, this.h)
     }
 
 
@@ -96,6 +98,11 @@ class Jetpack extends Powerup {
     constructor(platform) {
         super(platform)
 
+        this.w = 20
+        this.h = 40
+
+        this.sprite = Sprites.jetpack
+
         this.boost = -40
         this.duration = 2500
 
@@ -133,6 +140,8 @@ class SpringBoots extends Powerup {
         this.w = 50
         this.h = 20
 
+        this.sprite = Sprites.springBoots
+
         this.duration = 6000
         this.jumpBoost = 8
     }
@@ -158,6 +167,8 @@ class MachineGun extends Powerup {
 
         this.w = 40
         this.h = 40
+
+        this.sprite = Sprites.machineGun
 
         this.bulletCount = 0
         this.rotationSpeed = 20
