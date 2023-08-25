@@ -3,6 +3,12 @@
         - dont have GameState, Scene etc, as their own global objects
             put them under Game 
             e.g "const Scene = {}" --> "Game.Scene = {}"
+        - special function for ambient sound
+        - argument for sound volume
+        - better sliders, or just use p5js sliders
+            - implement step size
+            - read values better (e.g, for volume, I have to set Settings.globalVolume = activeInteractions[1].value, this bad)
+        - states need renaming
 
 Game design notes
 
@@ -31,7 +37,7 @@ let visiblePlatforms = [] // all currently visible platforms
 let visibleEnemies = [] // all currently visible enemies 
 let visiblePowerups = [] // all currently visible powerups
 
-let activeButtons = [] // all current active buttons
+let activeInteractions = [] // all current active interactible screen elements
 
 let frameTimes = []
 let avgFrames = 0
@@ -45,6 +51,8 @@ function preload() {
     loadSpriteFiles()
     // initialiseDatabase()
 
+    initSettings()
+
     console.log("load time: " + (Date.now() - t) + "ms")
 }
 
@@ -53,12 +61,15 @@ function preload() {
 function setup() {
     const sceneWidth = 600 
     
+    let font = loadFont(Game.textStyling.font)
+    textFont(font)
+
     setSceneDimensions(sceneWidth, windowHeight)
     setFloor(windowHeight)
     
     createCanvas(windowWidth, windowHeight) 
 
-    changeGameState(GameState.states.start)
+    changeGameState(GameState.states.generate)
 }
 
 // -------------------- DRAW --------------------
@@ -71,18 +82,8 @@ function draw() {
 // runs when key is pressed
 function keyPressed() {
 
-    if (keyCode === keys.space) {
-        // plr.jump()
-    }
-
-    if (keyCode === keys.leftArrow) {
-        if (ceil(frameRate()) > 10) frameRate(0)
-        else if (floor(frameRate()) === 0) frameRate(60)
-    }
-
-    if (keyCode === keys.upArrow) {
-        frameRate(0)
-        draw()
+    if (Game.debugMode) {
+        debugKeyBinds(keyCode)
     }
 
     if (keyCode === keys.w || keyCode === keys.space) {
@@ -90,11 +91,23 @@ function keyPressed() {
     }
 }
 
-// -------------------- MOUSECLICKED --------------------
+// -------------------- MOUSE EVENTS --------------------
 // runes when the mouse is clicked
 function mouseClicked() {
-    activeButtons.forEach(button => {
-        button.checkClicked()
+    // activeInteractions.forEach(button => {
+    //     button.checkClicked()
+    // })
+}
+
+function mousePressed() {
+    activeInteractions.forEach(interaction => {
+        interaction.checkClicked()
+    })
+}
+
+function mouseReleased() {
+    activeInteractions.forEach(interaction => {
+        interaction.clicked = false
     })
 }
 
