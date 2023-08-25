@@ -5,17 +5,26 @@
 const Sprites = {
     player: 'sprites/player.png',
 
+    // --- enemies --- 
     basicEnemy: 'sprites/enemy.png',
 
+
+    // --- powerups --- 
     jetpack: 'sprites/jetpack.png',
     bubbleBlower: 'sprites/bubble blower.png',
     springBoots: 'sprites/spring boots.png',
+
 
     projectile: 'sprites/projectile.png',
 
     background: 'sprites/sky background.png',
 
+    // --- ui ---
+    title: 'sprites/title.png',
+    settingsButton: 'sprites/settings.png',
     playButton: 'sprites/play.png',
+    backButton: 'sprites/back arrow.png',
+
 
     spriteData: {
         loaded: []

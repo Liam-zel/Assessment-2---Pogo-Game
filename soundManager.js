@@ -13,12 +13,13 @@ const Sounds = {
     shoot: ['sounds/shoot 1.wav', 'sounds/shoot 2.wav'],
     projectile: ['sounds/projectile.wav'],
 
-    // todo: enmemy isnt loading, maybe make preload async and await for a load
-    enemyDeath: ['enemy death 1.wav', 'enemy death 2.wav'],
+    // --- ambience ---
+    birdAmbience: ['sounds/birds chirping ambience.mp3'],
+
+    enemyDeath: ['sounds/enemy death 1.wav', 'sounds/enemy death 2.wav'],
 
     soundData: {
         loaded: [],
-        globalVolume: 0.1,
         
         activeSounds: [], // all currently playing sounds
         // maxSounds: 16
@@ -33,24 +34,25 @@ const Sounds = {
  */
 function loadSoundFiles() {
 
-    Howler.volume(Sounds.soundData.globalVolume)
+    Howler.volume(Settings.globalVolume)
 
     for (let arrName in Sounds) {
         if (arrName === "soundData") continue
 
         Sounds[arrName].forEach(soundUrl => {
-            Sounds.soundData.loaded.push(new Howl({src: soundUrl}))
+            Sounds.soundData.loaded.push(new Howl({src: [soundUrl]}))
         })
 
     }
-
 }
 
 
 /**
  * Plays specified sound
+ * @param {String} sound sound file url
+ * @param {Boolean} looped loops file infinitely
  */
-function playSound(sound) {
+function playSound(sound, looped) {
     let chosenSound = sound[floor(random(sound.length))]
 
     let loaded = Sounds.soundData.loaded
@@ -58,6 +60,11 @@ function playSound(sound) {
         if (sound._src === chosenSound) {
             Sounds.soundData.activeSounds.push(sound)
             sound.play()
+
+            if (looped) {
+                sound.loop()
+            }
+
             return
         }
     })
