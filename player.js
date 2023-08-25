@@ -8,15 +8,13 @@ class Player {
         this.x = x + Scene.xOffset
         this.y = y
 
-        this.col = '#FF2346'
-
         this.w = 30
         this.h = 40
 
         this.squash = 0
         this.inSquash = false
         this.stretch = 0
-        this.maxStretch = 30
+        this.maxStretch = 25
 
         this.jumpPower = 20
         this.gravity = 0.8
@@ -315,7 +313,7 @@ class Player {
 
         uploadScore()
         
-        changeGameState(GameState.states.death)
+        changeGameState(GameState.states.gameOver)
     }
 
 
@@ -323,12 +321,14 @@ class Player {
      * Updates horizontal movement for player
      */
     move() {
-        if (Settings.inputMode === 'mouse') {
+        // mouse movement
+        if (Settings.currentInputMode === Settings.inputModes.mouse) {
             this.xTarget = mouseX - (mouseX - pmouseX)
             if (this.xTarget > Scene.rightBorder) this.xTarget = Scene.rightBorder
             if (this.xTarget < Scene.leftBorder) this.xTarget = Scene.leftBorder
         }
-        else if (Settings.inputMode === 'keys') {
+        // keyboard movement
+        else if (Settings.currentInputMode === Settings.inputModes.keys) {
             const speed = 15
             if (keyIsDown(keys.leftArrow) || keyIsDown(keys.a)) {
                 this.xTarget -= speed
