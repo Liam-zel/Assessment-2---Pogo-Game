@@ -8,6 +8,8 @@ const Game = {
                       // if score is based off height in pixels, 
                       // getting high numbers is too easy and unrewarding
 
+    debugMode: false,
+
     scoreTextStyling: { 
         fontSize: 45,
         outlineSize: 5,
@@ -15,10 +17,20 @@ const Game = {
         yPos: 60
     },
 
+    textStyling: {
+        outlineSize: 5,
+        colour: '#CAE6B3',
+        font: 'fonts/Amaranth.ttf'
+    },
+
+
+    ambientSound: undefined,
+
     // --- initial game values ---
     // game values that change have to have their initial values stored here
     initialGameValues: {
         score: 0,
+
         powerupChance: 100, // 1 in powerupChance for a platform to have a powerup generated with it
 
         maxPlatformDistance: 130,
@@ -26,7 +38,8 @@ const Game = {
 
         enemySpacing: 1000,
 
-        floorKills: false
+        finishedGeneration: false,
+        floorKills: false,
     },
 
     powerupChance: undefined,
@@ -55,6 +68,7 @@ const Game = {
         basicEnemy: [0],
         fakePlatform: [1],
     },
+    finishedGeneration: false,
 
 
     floorKills: undefined,
@@ -85,8 +99,8 @@ function drawScore() {
     textAlign(CENTER)
     
     text(Game.score + "m", windowWidth/2, Game.scoreTextStyling.yPos)
-    if (avgFrames < 40) fill(255, 0, 0)
-    text(floor(avgFrames) + "fps", windowWidth/2, Scene.height - Game.scoreTextStyling.yPos)
+    // if (avgFrames < 40) fill(255, 0, 0)
+    // text(floor(avgFrames) + "fps", windowWidth/2, Scene.height - Game.scoreTextStyling.yPos)
 
     pop()
 }
@@ -98,25 +112,25 @@ function drawScore() {
  */
 function createObstacles() {
 
-        if (Game.score < 1000) {
-            Game.powerupChance = 35
+    if (Game.score < 1000) {
+        Game.powerupChance = 35
 
-            setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
-            createPlatforms(Game.generationTypes.onlyGreen)
-            return
-        }
+        setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
+        createPlatforms(Game.generationTypes.onlyGreen)
+        return
+    }
 
-        if (Game.score < 3000) {
-            Game.powerupChance = 80
+    if (Game.score < 3000) {
+        Game.powerupChance = 80
 
-            createPlatforms(Game.generationTypes.greenAndBreaking)
-            return
-        }
+        createPlatforms(Game.generationTypes.greenAndBreaking)
+        return
+    }
 
-        if (Game.score < 5500) {
-            createPlatforms(Game.generationTypes.all)
-            return
-        }
+    if (Game.score < 5500) {
+        createPlatforms(Game.generationTypes.all)
+        return
+    }
 
     if (Game.score < 10000) {
         Game.enemySpacing = 700
@@ -143,7 +157,9 @@ function createObstacles() {
 }
 
 
-
+/**
+ * Set game values as if the game was just loaded
+ */
 function initaliseGame() {
     // set game property values to their default values 
     const initialValues = Game.initialGameValues
@@ -155,7 +171,7 @@ function initaliseGame() {
     Sounds.soundData.activeSounds.forEach(sound => {
         // sound.stop() and soud.mute() don't work due to
         // errors with reactjs (I think p5js uses react)
-        sound.volume(0)
+        sound.stop()
     })
 
     // set global variables
@@ -163,5 +179,25 @@ function initaliseGame() {
     visiblePlatforms = []
     visibleEnemies = [] 
     visiblePowerups = [] 
-    activeButtons = [] 
+    activeInteractions = [] 
+}
+
+
+/**
+ * debug shortcuts
+ */
+function debugKeyBinds(keyCode) {
+    if (keyCode === keys.space) {
+        plr.jump()
+    }
+
+    if (keyCode === keys.leftArrow) {
+        if (ceil(frameRate()) > 10) frameRate(0)
+        else if (floor(frameRate()) === 0) frameRate(60)
+    }
+
+    if (keyCode === keys.upArrow) {
+        frameRate(0)
+        draw()
+    }
 }
