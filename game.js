@@ -41,7 +41,9 @@ const Game = {
         finishedGeneration: false,
         floorKills: false,
 
-        setHighscore: false,
+        highscoreSet: false,
+
+        heightTint: undefined,
     },
 
     powerupChance: undefined,
@@ -73,7 +75,9 @@ const Game = {
     finishedGeneration: false,
 
     highscore: localStorage.getItem("highscore"),
-    setHighscore: false,
+    highscoreSet: undefined,
+
+    heightTint: undefined,
 
     floorKills: undefined,
 }
@@ -118,41 +122,51 @@ function createObstacles() {
 
     if (Game.score < 1000) {
         Game.powerupChance = 35
-
+        setBackgroundSprite(Sprites.skyBackground)
+        
         setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
         createPlatforms(Game.generationTypes.onlyGreen)
         return
     }
-
+    
     if (Game.score < 3000) {
-        Game.powerupChance = 80
-
+        Game.powerupChance = 8
+        
+        Game.heightTint = color(222, 229, 252)
+        
         setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
         createPlatforms(Game.generationTypes.greenAndBreaking)
         return
     }
-
+    
     if (Game.score < 5500) {
+        Game.heightTint = color(174, 190, 245)
+        
         setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
         createPlatforms(Game.generationTypes.all)
         return
     }
-
+    
     if (Game.score < 10000) {
         Game.enemySpacing = 700
         Game.powerupChance = 60
+        
+        Game.heightTint = color(132, 155, 232)
+        setBackgroundSprite(Sprites.spaceBackground)
         
         setAvailablePowerups(Game.powerupCombos.onlyBubbleBlower)
         createPlatforms(Game.generationTypes.onlyMoving)
         createEnemies(Game.generationTypes.basicEnemy)
         return
     }
-
+    
     if (Game.score < 99999) {
         Game.enemySpacing = 300
         Game.maxPlatformDistance = 100
         Game.minPlatformDistance = 100
         Game.powerupChance = 40
+        
+        Game.heightTint = color(99, 125, 212)
 
         setAvailablePowerups(Game.powerupCombos.onlyBubbleBlower)
         createPlatforms(Game.generationTypes.onlyGreen)
@@ -187,6 +201,8 @@ function initaliseGame() {
     visiblePowerups = [] 
     activeInteractions = [] 
 
+    Game.heightTint = color(255)
+
     Camera.totalScroll = 0
 }
 
@@ -216,7 +232,7 @@ function debugKeyBinds(keyCode) {
 function updateHighscore(score) {
     localStorage.setItem("highscore", score)
     Game.highscore = score
-    Game.setHighscore = true
+    Game.highscoreSet = true
 }
 
 /**
