@@ -9,6 +9,7 @@
             - implement step size
             - read values better (e.g, for volume, I have to set Settings.globalVolume = activeInteractions[1].value, this bad)
         - states need renaming
+        - Improve slider
 
 Game design notes
 
