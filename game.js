@@ -40,6 +40,8 @@ const Game = {
 
         finishedGeneration: false,
         floorKills: false,
+
+        setHighscore: false,
     },
 
     powerupChance: undefined,
@@ -70,6 +72,8 @@ const Game = {
     },
     finishedGeneration: false,
 
+    highscore: localStorage.getItem("highscore"),
+    setHighscore: false,
 
     floorKills: undefined,
 }
@@ -123,11 +127,13 @@ function createObstacles() {
     if (Game.score < 3000) {
         Game.powerupChance = 80
 
+        setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
         createPlatforms(Game.generationTypes.greenAndBreaking)
         return
     }
 
     if (Game.score < 5500) {
+        setAvailablePowerups(Game.powerupCombos.noBubbleBlower)
         createPlatforms(Game.generationTypes.all)
         return
     }
@@ -180,6 +186,8 @@ function initaliseGame() {
     visibleEnemies = [] 
     visiblePowerups = [] 
     activeInteractions = [] 
+
+    Camera.totalScroll = 0
 }
 
 
@@ -200,4 +208,26 @@ function debugKeyBinds(keyCode) {
         frameRate(0)
         draw()
     }
+}
+
+/**
+ * Updates high score in Game object & local storage
+ */
+function updateHighscore(score) {
+    localStorage.setItem("highscore", score)
+    Game.highscore = score
+    Game.setHighscore = true
+}
+
+/**
+ * Draws a line at highscore's y position
+ */
+function drawHighscoreLine() {
+    if ((Game.highscore - Game.score) / Game.scoreMulti > Scene.height) return
+    else if ((Game.score - Game.highscore) / Game.scoreMulti > Scene.height) return
+    else if (plr.dead) return // prevents line from drawing for one frame when player dies with new highscore
+
+    let y = Scene.height - (Game.highscore / Game.scoreMulti) + Camera.totalScroll
+    stroke(255)
+    line(Scene.leftBorder, y, Scene.rightBorder, y)
 }
