@@ -43,6 +43,7 @@ function loadSoundFiles() {
 
         Sounds[arrName].forEach(soundUrl => {
             console.log(soundUrl)
+            Sounds.soundData.test = 1
             Sounds.soundData.loaded.push(new Howl({src: [soundUrl]}))
         })
 
