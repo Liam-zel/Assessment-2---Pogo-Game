@@ -303,5 +303,4 @@ function gameOver() {
     })
 
     drawWindowBorder()
-    // changeGameState(GameState.states.death)
 }
