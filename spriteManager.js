@@ -17,7 +17,8 @@ const Sprites = {
 
     projectile: 'sprites/projectile.png',
 
-    background: 'sprites/sky background.png',
+    skyBackground: 'sprites/sky background.jpeg',
+    spaceBackground: 'sprites/space background.jpeg',
 
     // --- ui ---
     title: 'sprites/title.png',
