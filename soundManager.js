@@ -18,6 +18,8 @@ const Sounds = {
 
     enemyDeath: ['sounds/enemy death 1.wav', 'sounds/enemy death 2.wav'],
 
+    highscore: ['sounds/highscore 1.wav', 'sounds/highscore 2.wav', 'sounds/highscore 3.wav'],
+
     soundData: {
         loaded: [],
         
