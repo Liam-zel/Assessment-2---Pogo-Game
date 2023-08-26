@@ -12,6 +12,8 @@ let Scene = {
     xOffset: undefined,
 
     floorHeight: undefined,
+    backgroundOffset: 0,
+    backgroundSprite: undefined
 }
 
 
@@ -52,4 +54,28 @@ function drawWindowBorder() {
 
     rect(halfScreen + (Scene.width/2), 0, 
          windowWidth, Scene.floorHeight)
+}
+
+
+/**
+ * Draws and applies parralax to background
+ */
+function drawBackground() {
+    tint(Game.heightTint)
+
+    sprite(Scene.backgroundSprite, Scene.leftBorder, Scene.backgroundOffset, Scene.width, Scene.height)
+    sprite(Scene.backgroundSprite, Scene.leftBorder, Scene.backgroundOffset - Scene.height, Scene.width, Scene.height)
+    
+    Scene.backgroundOffset = (Camera.totalScroll / 3) % Scene.height
+    
+    noTint()
+}
+
+
+/**
+ * Sets scene's background sprite
+ * @param {String} sprite image url of sprite
+ */
+function setBackgroundSprite(sprite) {
+    Scene.backgroundSprite = sprite
 }
