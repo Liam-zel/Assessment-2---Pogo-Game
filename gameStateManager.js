@@ -102,6 +102,21 @@ const GameState = {
                 backButton.setState(GameState.states.death)
 
                 activeInteractions = [playButton, backButton]
+
+                // --- high score ---
+                if (Game.score > Game.highscore) {
+                    updateHighscore(Game.score)
+
+                    let soundCount = 3
+                    let currentSound = 0
+
+                    // high score jingle
+                    let soundInterval = setInterval(() => {
+                        playSound(Sounds.highscore)
+                        currentSound++
+                        if (currentSound === soundCount) clearInterval(soundInterval)
+                    }, 100)
+                }
             },
             function: gameOver
         },
@@ -192,8 +207,13 @@ function runGame() {
     plr.move()
 
     // --- UI ---
-    // draws current score to screen
     drawScore()
+    drawHighscoreLine() // draws line at highscore's y position
+
+    if (Game.score > Game.highscore && !Game.setHighscore) {
+        Game.setHighscore = true
+        playSound(Sounds.highscore)
+    }
  
     drawWindowBorder()
 
@@ -269,7 +289,6 @@ function playerDeath() {
 function gameOver() {
     // --- background ---
     sprite(Sprites.background, Scene.leftBorder, 0, Scene.width, Scene.height)
-        
 
 
     // --- platforms, powerups, enemies ---
@@ -295,6 +314,20 @@ function gameOver() {
 
     textSize(45)
     text(`Final Score: ${finalScore}m`, Scene.leftBorder + Scene.width / 2, 200)
+    text(`Highscore: ${Game.highscore}m`, Scene.leftBorder + Scene.width / 2, 450)
+
+    if (Game.setHighscore) {
+        let size = abs(40 * sin(frameCount / 30)) + 35
+
+        let r = noise(frameCount/100) * 255 + 140
+        let g = noise(frameCount/200) * 255 + 80
+        let b = noise(frameCount/300) * 255 + 90
+        let col = color(r,g,b)
+
+        fill(col)
+        textSize(size)
+        text("NEW HIGHSCORE!", Scene.leftBorder + Scene.width / 2, 350)
+    }
 
     // --- button elements
     activeInteractions.forEach(interaction => {
