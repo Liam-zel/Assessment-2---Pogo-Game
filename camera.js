@@ -1,7 +1,14 @@
+// -------------------- CAMERA OBJECT --------------------
+/**
+ * Global object that defines camera variables
+ */
 Camera = {
-    wasScrolled: false
+    wasScrolled: false,
+    totalScroll: 0,
 }
 
+
+// -------------------- FUNCTIONS --------------------
 /**
  * Scrolls the camera up to follow the player
  */
@@ -28,5 +35,6 @@ function scrollCamera() {
     updateScore(yScroll)
 
     Camera.wasScrolled = true
+    Camera.totalScroll += yScroll
     Game.floorKills = true
 }
