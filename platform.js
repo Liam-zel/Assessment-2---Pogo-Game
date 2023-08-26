@@ -56,6 +56,10 @@ class BreakablePlatform extends Platform {
 
         this.yVel += 0.5
         this.y += this.yVel
+
+        if (this.attachedPowerup !== undefined) {
+            this.attachedPowerup.y += this.yVel
+        }
     }
 
     onCollision(plr) {
