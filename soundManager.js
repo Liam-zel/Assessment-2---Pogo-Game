@@ -42,6 +42,7 @@ function loadSoundFiles() {
         if (arrName === "soundData") continue
 
         Sounds[arrName].forEach(soundUrl => {
+            console.log(soundUrl)
             Sounds.soundData.loaded.push(new Howl({src: [soundUrl]}))
         })
 
