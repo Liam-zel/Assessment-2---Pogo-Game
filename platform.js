@@ -47,6 +47,15 @@ class BreakablePlatform extends Platform {
 
         this.col = '#FFD700'
         this.broken = false
+
+        this.yVel = 0
+    }
+
+    update() {
+        if (!this.broken) return
+
+        this.yVel += 0.5
+        this.y += this.yVel
     }
 
     onCollision(plr) {
