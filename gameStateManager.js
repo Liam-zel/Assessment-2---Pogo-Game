@@ -144,8 +144,7 @@ function changeGameState(state) {
  * Start, shows start ui
  */
 function startMenu() {
-    // --- background ---
-    sprite(Sprites.background, Scene.leftBorder, 0, Scene.width, Scene.height)
+    drawBackground()
     
     
     // --- platforms, powerups, enemies ---
@@ -179,8 +178,7 @@ function startMenu() {
  * Actual gameplay
  */
 function runGame() {
-    // --- background ---
-    sprite(Sprites.background, Scene.leftBorder, 0, Scene.width, Scene.height)
+    drawBackground()
 
     // --- platforms, powerups, enemies ---
     visiblePlatforms.forEach(platform => {
@@ -210,8 +208,8 @@ function runGame() {
     drawScore()
     drawHighscoreLine() // draws line at highscore's y position
 
-    if (Game.score > Game.highscore && !Game.setHighscore) {
-        Game.setHighscore = true
+    if (Game.score > Game.highscore && !Game.highscoreSet) {
+        Game.highscoreSet = true
         playSound(Sounds.highscore)
     }
  
@@ -229,8 +227,7 @@ function runGame() {
 
 
 function settings() {
-    // --- background ---
-    sprite(Sprites.background, Scene.leftBorder, 0, Scene.width, Scene.height)
+    drawBackground()
     
     
     // --- platforms, powerups, enemies ---
@@ -287,9 +284,7 @@ function playerDeath() {
  * Game over ui
  */
 function gameOver() {
-    // --- background ---
-    sprite(Sprites.background, Scene.leftBorder, 0, Scene.width, Scene.height)
-
+    drawBackground()
 
     // --- platforms, powerups, enemies ---
     visiblePlatforms.forEach(platform => {
@@ -316,7 +311,7 @@ function gameOver() {
     text(`Final Score: ${finalScore}m`, Scene.leftBorder + Scene.width / 2, 200)
     text(`Highscore: ${Game.highscore}m`, Scene.leftBorder + Scene.width / 2, 450)
 
-    if (Game.setHighscore) {
+    if (Game.highscoreSet) {
         let size = abs(40 * sin(frameCount / 30)) + 35
 
         let r = noise(frameCount/100) * 255 + 140
