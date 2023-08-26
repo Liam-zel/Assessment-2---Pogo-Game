@@ -5,7 +5,7 @@
 const Sounds = {
     highJump: ['sounds/high jump 1.wav', 'sounds/high jump 2.wav'],
 
-    lowJump: ['sounds/low jump.wav'],
+    lowJump: ['sounds/jump.wav'],
 
     jetpackStart: ['sounds/jetpack 1.wav'],
     jetpackEnd: ['sounds/jetpack 2.wav', 'sounds/jetpack 3.wav'],
@@ -42,8 +42,6 @@ function loadSoundFiles() {
         if (arrName === "soundData") continue
 
         Sounds[arrName].forEach(soundUrl => {
-            console.log(soundUrl)
-            Sounds.soundData.test = 1
             Sounds.soundData.loaded.push(new Howl({src: [soundUrl]}))
         })
 
