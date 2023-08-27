@@ -106,21 +106,28 @@ function mousePressed() {
     })
 }
 
-function touchStarted() {
-    visiblePlatforms = []
-    activeInteractions.forEach(interaction => {
-        interaction.checkClicked()
-    })
-}
-
 function mouseReleased() {
     activeInteractions.forEach(interaction => {
         interaction.clicked = false
     })
 }
 
+function touchStarted() {
+    Game.touchTime = Date.now()
+
+    activeInteractions.forEach(interaction => {
+        interaction.checkClicked()
+    })
+}
+
+
 
 function touchEnded() {
+    let timeTouched = Date.now() - Game.touchTime
+    if (timeTouched < 160) {
+        plr.shoot()
+    }
+    
     activeInteractions.forEach(interaction => {
         interaction.clicked = false
     })

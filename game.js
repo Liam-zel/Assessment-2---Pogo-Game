@@ -10,6 +10,8 @@ const Game = {
 
     debugMode: false,
 
+    touchTime: 0,
+
     scoreTextStyling: { 
         fontSize: 45,
         outlineSize: 5,
