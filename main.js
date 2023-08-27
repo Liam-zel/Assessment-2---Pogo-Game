@@ -113,6 +113,10 @@ function mouseReleased() {
 }
 
 function touchStarted() {
+    // google made a change that prevented sounds from playing without consent, this is a workaround
+    let ctx = new AudioContext
+    ctx.resume()
+
     Game.touchTime = Date.now()
 
     activeInteractions.forEach(interaction => {
@@ -131,11 +135,4 @@ function touchEnded() {
     activeInteractions.forEach(interaction => {
         interaction.clicked = false
     })
-}
-
-
-// google made a change that prevented sounds from playing without consent, this is a workaround
-function touchStarted() {
-    let ctx = new AudioContext
-    ctx.resume()
 }
