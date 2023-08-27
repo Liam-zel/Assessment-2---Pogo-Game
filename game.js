@@ -132,7 +132,7 @@ function createObstacles() {
     }
     
     if (Game.score < 3000) {
-        Game.powerupChance = 8
+        Game.powerupChance = 80
         
         Game.heightTint = color(222, 229, 252)
         
