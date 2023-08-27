@@ -106,7 +106,21 @@ function mousePressed() {
     })
 }
 
+function touchStarted() {
+    visiblePlatforms = []
+    activeInteractions.forEach(interaction => {
+        interaction.checkClicked()
+    })
+}
+
 function mouseReleased() {
+    activeInteractions.forEach(interaction => {
+        interaction.clicked = false
+    })
+}
+
+
+function touchEnded() {
     activeInteractions.forEach(interaction => {
         interaction.clicked = false
     })
