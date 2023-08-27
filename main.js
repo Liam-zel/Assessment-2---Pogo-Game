@@ -117,6 +117,8 @@ function touchStarted() {
     let ctx = new AudioContext
     ctx.resume()
 
+    Game.highscore = 0
+
     Game.touchTime = Date.now()
 
     activeInteractions.forEach(interaction => {
