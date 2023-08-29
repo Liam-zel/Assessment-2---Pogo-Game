@@ -99,9 +99,6 @@ class Player {
             point(p.x, p.y)
         }
 
-        // heighest point
-        // line(0, plr.heighestPoint, windowWidth, plr.heighestPoint)
-
         pop()
     }
 
@@ -280,7 +277,7 @@ class Player {
 
         // floor
         if (this.y + this.h/2 > Scene.floorHeight) {
-            if (Game.floorKills) return this.kill('FLOOOOOOOR')
+            if (Game.floorKills) return this.kill('floor')
 
             let adjustment = this.y - Scene.floorHeight + this.h/2
             this.updateCollisionPoints(0, -adjustment)
@@ -329,7 +326,7 @@ class Player {
         }
         // keyboard movement
         else if (Settings.currentInputMode === Settings.inputModes.keys) {
-            const speed = 15
+            const speed = 10
             if (keyIsDown(keys.leftArrow) || keyIsDown(keys.a)) {
                 this.xTarget -= speed
             }
@@ -397,9 +394,9 @@ class Projectile {
         this.y += this.yVel
         this.x += this.xVel
 
-        if (this.x < Scene.leftBorder || this.x > Scene.rightBorder) plr.projectiles.splice(plr.projectiles.indexOf(this), 1)
+        if (this.x < Scene.leftBorder || this.x > Scene.rightBorder) this.remove()
 
-        if (this.y < 0 || this.y > Scene.floorHeight) plr.projectiles.splice(plr.projectiles.indexOf(this), 1)
+        if (this.y < 0 || this.y > Scene.floorHeight) this.remove()
 
         this.checkEnemyCollision()
     }
