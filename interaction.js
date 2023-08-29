@@ -66,7 +66,7 @@ class Interaction {
         if (this.clicked) {
             if (this.checkClicked()) this.onHold()
             else {
-                this.onHold()
+                this.letGo()
                 this.clicked = false
             }
         }
@@ -77,13 +77,15 @@ class Interaction {
     onClick() {} // runs when interactible is clicked
 
     onHold() {} // runs when interactible is held down
+
+    letGo() {} // runs when interctible is let go
 }
 
 
 /**
  * Sets the game's state to a specified value when clicked
  */
-class StateButton extends Interaction {
+class CommandButton extends Interaction {
     constructor(x,y,w,h) {
         super(x,y,w,h)
 
@@ -113,10 +115,12 @@ class Slider extends Interaction {
 
         this.value = 0.25
 
+        this.function = () => {}
+
         this.min = 0
         this.max = 1
 
-        this.step = 0.1
+        // this.step = 0.1
 
         this.pointCol = '#A5D46A'
         this.progressCol = '#C9E5A5'
@@ -132,19 +136,35 @@ class Slider extends Interaction {
 
         strokeWeight(3)
 
-        // i hate this, this will be redone later
         rectMode(CENTER)
 
+        // this is bad
+        // empty bar
         fill(this.emptyCol)
         rect(this.x, this.y, this.w, size - 20)
 
+        // filled bar
         fill(this.progressCol)
         rect(this.x - this.w/2 + (this.w * sliderProgress) / 2, this.y, this.w * sliderProgress, size - 20, rectRounding)
 
         rectMode(CORNER)
 
-        fill(this.progressCol)
+        fill(this.pointCol)
         circle(this.x - this.w/2 + (this.w * sliderProgress), this.y, size)
+    }
+
+
+    /**
+     * Sets the function ran when the slider value changes
+     * @param {Function} func 
+     */
+    setFunction(func) {
+        this.function = func
+    }
+
+    
+    initState(val) {
+        this.value = val
     }
 
 
@@ -158,13 +178,13 @@ class Slider extends Interaction {
         this.max = max
     }
 
-    /**
-     * Sets how much the value of the slider increases per pixel
-     * @param {Number} step
-     */
-    setStep(step) {
-        this.step = step
-    }
+    // /**
+    //  * Sets how much the value of the slider increases per pixel
+    //  * @param {Number} step
+    //  */
+    // setStep(step) {
+    //     this.step = step
+    // }
 
 
     onHold() {
@@ -173,8 +193,67 @@ class Slider extends Interaction {
 
         this.value = this.max * percentageClicked + this.min
 
+        this.function()
+
         if (this.value > this.max) this.value = this.max
         if (this.value < this.min) this.value = this.min
+    }
+
+    letGo() {
+        if (this.value > this.max) this.value = this.max
+        if (this.value < this.min) this.value = this.min
+    }
+}
+
+
+/**
+ * A checkbox which represents a true or false value
+ */
+class Checkbox extends Interaction {
+    constructor(x,y,w,h) {
+        super(x,y,w,h)
+
+        this.state = false
+
+        this.options = []
+
+        this.offCol = '#FFFFFF'
+        this.onCol = '#A5D46A'
+
+        // this.initState(value)
+    }
+
+    initState(value) {
+        this.state = value
+    }
+
+    checkHeld() {} // remove checkHeld function
+
+    /**
+     * @param {Function} option1 unchecked value
+     * @param {Function} option2 checked value
+     */
+    setOptions(option1, option2) {
+        this.options = [option1, option2]
+    }
+
+
+    onClick() {
+        this.state = !this.state
+        this.options[+this.state]()
+    }
+
+
+    draw() {
+        if (this.state) fill(this.onCol)
+        else fill(this.offCol)
+
+        strokeWeight(3)
+        rectMode(CENTER)
+
+        rect(this.x, this.y, this.w, this.h)
+
+        rectMode(CORNER)
     }
 }
 
