@@ -37,11 +37,11 @@ const GameState = {
                 playSound(Game.ambientSound, true)
 
                 // --- buttons ---
-                const playButton = new StateButton(Scene.leftBorder + Scene.width / 2 + 50, Scene.floorHeight - 100, 180, 180) 
+                const playButton = new CommandButton(Scene.leftBorder + Scene.width / 2 + 50, Scene.floorHeight - 100, 180, 180) 
                 playButton.setSprite(Sprites.playButton)
                 playButton.setState(GameState.states.game)
 
-                const settingsButton = new StateButton(Scene.leftBorder + Scene.width / 2 - 150, Scene.floorHeight - 100, 110, 110)
+                const settingsButton = new CommandButton(Scene.leftBorder + Scene.width / 2 - 150, Scene.floorHeight - 100, 110, 110)
                 settingsButton.setSprite(Sprites.settingsButton)
                 settingsButton.setState(GameState.states.settings)
 
@@ -67,14 +67,26 @@ const GameState = {
          */
         settings: {
             initState: () => {
-                const backButton = new StateButton(Scene.leftBorder + 100, Scene.floorHeight - 100, 110, 110)
+                const backButton = new CommandButton(Scene.leftBorder + 100, Scene.floorHeight - 100, 110, 110)
                 backButton.setSprite(Sprites.backButton)
                 backButton.setState(GameState.states.start)
 
                 const volumeSlider = new Slider(Scene.leftBorder + Scene.width / 2, 210,
                                                 200, 35)
+                volumeSlider.setFunction(
+                    () => {changeSetting("globalVolume", volumeSlider.value)}
+                )
+                volumeSlider.initState(Settings.globalVolume)
 
-                activeInteractions = [backButton, volumeSlider]
+                const inputType = new Checkbox(Scene.leftBorder + Scene.width / 2 + 50, 305,
+                                               100, 35)
+                inputType.setOptions(
+                    () => {changeSetting("currentInputMode", Settings.inputModes.mouse)},
+                    () => {changeSetting("currentInputMode", Settings.inputModes.keys)},
+                )
+                inputType.initState(Settings.currentInputMode)
+
+                activeInteractions = [backButton, volumeSlider, inputType]
             },
             function: settings
         },
@@ -93,11 +105,11 @@ const GameState = {
         gameOver: {
             initState: () => {
                 // --- buttons ---
-                const playButton = new StateButton(Scene.leftBorder + Scene.width / 2 + 50, Scene.floorHeight - 100, 180, 180) 
+                const playButton = new CommandButton(Scene.leftBorder + Scene.width / 2 + 50, Scene.floorHeight - 100, 180, 180) 
                 playButton.setSprite(Sprites.playButton)
                 playButton.setState(GameState.states.restart)
 
-                const backButton = new StateButton(Scene.leftBorder + 100, Scene.floorHeight - 100, 110, 110)
+                const backButton = new CommandButton(Scene.leftBorder + 100, Scene.floorHeight - 100, 110, 110)
                 backButton.setSprite(Sprites.backButton)
                 backButton.setState(GameState.states.death)
 
@@ -200,7 +212,7 @@ function runGame() {
     // --- player ---
     plr.draw()
     // plr.debugDraw()
-
+    
     plr.update()
     plr.move()
 
@@ -253,10 +265,11 @@ function settings() {
 
     text("Settings", Scene.leftBorder + Scene.width / 2, 100)
 
-    textSize(45)
+    textSize(40)
     text("Volume: ", Scene.leftBorder + 100, 200)
 
-    Settings.globalVolume = activeInteractions[1].value
+    text("Use Keyboard: ", Scene.leftBorder + 150, 300)
+
     Howler.volume(Settings.globalVolume)
 
     // --- button elements
