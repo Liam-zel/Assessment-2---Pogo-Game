@@ -19,8 +19,8 @@ function scrollCamera() {
         })
     }
 
-    let adjustmenet = Scene.height/2 - plr.y
-    plr.updateCollisionPoints(0, adjustmenet)
+    let adjustment = Scene.height/2 - plr.y
+    plr.updateCollisionPoints(0, adjustment)
     plr.y = Scene.height/2
 
     let yScroll = -plr.yVel 
