@@ -4,8 +4,8 @@
  */
 const Settings = {
     inputModes: {
-        mouse: 1,
-        keys: 2,
+        mouse: 0,
+        keys: 1,
     },
     currentInputMode: undefined,
 
@@ -25,6 +25,14 @@ const Settings = {
  * Set default settings values
  */
 function initSettings() {
-    Settings.currentInputMode = Settings.inputModes.mouse
+    Settings.currentInputMode = parseInt(localStorage.getItem("currentInputMode")) || Settings.inputModes.mouse
+    Settings.globalVolume = parseFloat(localStorage.getItem("globalVolume")) || 0.2
+
     Settings.language = Settings.supportedLanguages.english
+}
+
+
+function changeSetting(setting, value) {
+    Settings[setting] = value
+    localStorage.setItem(setting, value)
 }
