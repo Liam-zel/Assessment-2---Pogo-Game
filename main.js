@@ -47,12 +47,11 @@ let avgFrames = 0
 // runs once before setup()
 function preload() {
     let t = Date.now()
+    initSettings()
 
     loadSoundFiles()
     loadSpriteFiles()
     // initialiseDatabase()
-
-    initSettings()
 
     console.log("load time: " + (Date.now() - t) + "ms")
 }
@@ -108,6 +107,7 @@ function mousePressed() {
 
 function mouseReleased() {
     activeInteractions.forEach(interaction => {
+        if (interaction.clicked) interaction.letGo()
         interaction.clicked = false
     })
 }
