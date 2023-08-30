@@ -307,8 +307,6 @@ class Player {
      */
     kill(killer) {
         this.dead = true
-
-        // uploadScore()
         
         changeGameState(GameState.states.gameOver)
     }
