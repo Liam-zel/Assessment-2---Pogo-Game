@@ -76,7 +76,7 @@ function playSound(sound, looped) {
  * Deletes sounds finished playing and makes sure there are no more
  * than maxSounds amount of sounds playing concurrently
  */
-function deleteSounds() {
+// function deleteSounds() {
 
 
-}
+// }
