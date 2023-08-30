@@ -58,7 +58,7 @@ function drawWindowBorder() {
 
 
 /**
- * Draws and applies parralax to background
+ * Draws and applies parallax to background
  */
 function drawBackground() {
     tint(Game.heightTint)
