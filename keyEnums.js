@@ -1,3 +1,6 @@
+/**
+ * Ascii codes for keys
+ */
 const keys = {
     space: 32,
 
