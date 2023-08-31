@@ -138,7 +138,7 @@ class SpringBoots extends Powerup {
         this.col = '#B1B1B1'
 
         this.w = 50
-        this.h = 20
+        this.h = 35
 
         this.sprite = Sprites.springBoots
 

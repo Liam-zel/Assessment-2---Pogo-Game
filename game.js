@@ -166,7 +166,7 @@ function createObstacles() {
         Game.enemySpacing = 300
         Game.maxPlatformDistance = 100
         Game.minPlatformDistance = 100
-        Game.powerupChance = 40
+        Game.powerupChance = 25
         
         Game.heightTint = color(99, 125, 212)
 

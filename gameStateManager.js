@@ -178,7 +178,7 @@ function startMenu() {
            400, 250)
     imageMode(CORNER)
 
-    // --- button elements
+    // --- button elements ---
     activeInteractions.forEach(interaction => {
         interaction.draw()
     })
